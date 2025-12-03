@@ -102,6 +102,11 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Health check sencillo para plataformas de despliegue
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 // Serve some important static pages explicitly (ensure availability)
 app.get('/favoritos.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'favoritos.html')));
 app.get('/notificaciones.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'notificaciones.html')));
