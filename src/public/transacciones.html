@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Historial de Transacciones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/productos.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-header__inner">
+        <a href="index.html" class="app-brand">
+          <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+          Biddable
+        </a>
+        <nav class="app-nav">
+          <a href="productos.html">Subastas</a>
+          <a href="subastas-finalizadas.html">Finalizadas</a>
+          <a href="favoritos.html">Favoritos</a>
+          <a href="mensajes.html"><i class="fas fa-envelope"></i></a>
+          <a href="miCuenta.html"><i class="fas fa-user"></i></a>
+        </nav>
+        <div class="app-header__actions">
+          <a href="crearProducto.html" class="btn btn-outline-light">Vender un artículo</a>
+          <a href="productos.html" class="btn btn-primary">Explorar subastas</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="glass-panel" style="max-width:960px;margin:2rem auto;">
+        <div class="section-heading">
+          <h2 class="section-heading__title">Historial de Transacciones</h2>
+        </div>
+        <div id="trans-list"></div>
+        <div id="trans-pagination" style="margin-top:1rem;text-align:center"></div>
+      </section>
+    </main>
+  <footer class="app-footer">
+    <div class="app-footer__inner">
+      <div class="app-footer__brand">
+        <a href="index.html" class="app-brand">
+          <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+          Biddable
+        </a>
+        <p>Marketplace de subastas premium con servicio concierge, verificación documental y pagos garantizados.</p>
+      </div>
+      <div class="app-footer__cols">
+        <div class="app-footer__col">
+          <h4>Explorar</h4>
+          <ul>
+            <li><a href="productos.html">Subastas activas</a></li>
+            <li><a href="misPujas.html">Mis pujas</a></li>
+            <li><a href="misProductos.html">Mi inventario</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Soporte</h4>
+          <ul>
+            <li><a href="mensajes.html">Centro de mensajes</a></li>
+            <li><a href="miCuenta.html">Preferencias de cuenta</a></li>
+            <li><a href="registro.html">Unirme a Biddable</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Términos de uso</a></li>
+            <li><a href="#">Política de privacidad</a></li>
+            <li><a href="#">Centro de confianza</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2025 Biddable. Todos los derechos reservados.</div>
+  </footer>
+
+  <div id="notificacion-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;"></div>
+  <script src="/js/config.js"></script>
+  <script src="/js/notificacion.fixed.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/transacciones.js"></script>
+  </body>
+</html>

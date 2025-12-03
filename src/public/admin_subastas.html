@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Administrar Subastas – Biddable</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <link rel="stylesheet" href="css/theme.css" />
+</head>
+<body>
+<header class="bg-white border-bottom shadow-sm sticky-top header-grande">
+  <div class="container d-flex justify-content-between align-items-center py-3">
+    <a href="index.html" class="d-flex align-items-center gap-3 text-decoration-none">
+      <img src="uploads/logo-removebg-preview.png" alt="Logo" height="60">
+      <span class="fw-bold text-dark fs-4">Biddable - Admin</span>
+    </a>
+    <nav class="d-flex align-items-center gap-4">
+      <a href="gestion_usuarios.html" class="nav-link">Usuarios</a>
+      <a href="gestion_productos.html" class="nav-link">Productos</a>
+      <a href="admin_subastas.html" class="nav-link">Subastas</a>
+      <a href="notificaciones.html" class="nav-link">Notificaciones</a>
+      <a href="miCuenta.html" class="text-dark"><i class="fas fa-user fs-5"></i></a>
+    </nav>
+  </div>
+</header>
+
+<main class="container py-5">
+  <h1 class="mb-4">Gestión de Subastas</h1>
+  <div id="tabla-pujas" class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Pujador</th>
+          <th>Cantidad</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="pujas-body"></tbody>
+    </table>
+  </div>
+</main>
+
+<!-- MODAL DE CONFIRMACIÓN -->
+<div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar esta puja?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button id="btn-confirmar-eliminar" type="button" class="btn btn-danger">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Notificación -->
+<div id="notificacion-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;"></div>
+  <footer class="app-footer">
+    <div class="app-footer__inner">
+      <div class="app-footer__brand">
+        <a href="index.html" class="app-brand">
+          <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+          Biddable
+        </a>
+        <p>Herramientas administrativas para supervisar subastas y actividad.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2025 Biddable. Todos los derechos reservados.</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/notificacion.module.js" type="module"></script>
+  <script src="js/adminPujas.js" type="module"></script>
+  <script>
+    function cerrarSesion(){ localStorage.removeItem('token'); window.location.href='login.html'; }
+  </script>
+</body>
+</html>

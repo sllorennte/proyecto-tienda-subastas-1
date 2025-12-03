@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Detalle de Subasta – Biddable</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/producto.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a href="index.html" class="app-brand">
+        <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+        Biddable
+      </a>
+      <nav class="app-nav">
+        <a href="index.html">Inicio</a>
+        <a href="productos.html" class="is-active">Subastas</a>
+        <a href="misPujas.html">Mis pujas</a>
+        <a href="misProductos.html">Mis productos</a>
+        <a href="notificaciones.html" title="Notificaciones"><i class="fas fa-bell"></i></a>
+        <a href="favoritos.html" title="Favoritos"><i class="fas fa-heart"></i></a>
+        <a href="mensajes.html"><i class="fas fa-envelope"></i></a>
+        <a href="miCuenta.html"><i class="fas fa-user"></i></a>
+      </nav>
+      <div class="app-header__actions">
+        <a href="crearProducto.html" class="btn btn-outline-light">Vender un artículo</a>
+        <a href="misPujas.html" class="btn btn-primary">Revisar mis pujas</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="product-hero">
+    <div class="container">
+      <div class="product-hero__breadcrumbs">
+        <a href="index.html">Inicio</a>
+        <span>/</span>
+        <a href="productos.html">Subastas</a>
+        <span>/</span>
+        <span id="titulo-breadcrumb">Cargando…</span>
+      </div>
+      <div class="product-hero__headline">
+        <div>
+          <h1 id="titulo">Cargando título…</h1>
+          <p>N.º <span id="numero-subasta">00000000</span> · <span id="estado-subasta" class="status-pill">Cargando estado…</span></p>
+        </div>
+        <div class="product-hero__cta">
+          <div style="display:flex;gap:0.6rem;align-items:center">
+            <button id="btn-favorito" class="btn btn-outline-primary" title="Añadir a favoritos">
+              <i class="far fa-heart"></i>
+            </button>
+            <button id="btn-contactar-vendedor" class="btn btn-outline-light">
+              <i class="fas fa-envelope"></i> Contactar al vendedor
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="notificacion-container" style="position:fixed;right:1rem;top:6rem;z-index:2000"></div>
+
+  <main class="product-page container">
+    <section class="product-overview">
+      <div class="product-gallery glass-panel">
+        <div class="product-gallery__main" id="imagen-principal"></div>
+        <div id="thumbnails" class="product-gallery__thumbs"></div>
+      </div>
+      <div class="product-summary glass-panel">
+        <div class="product-summary__price">
+          <span>Puja actual</span>
+          <strong id="puja-actual">€0.00</strong>
+          <p id="precio-reserva" class="reserve-status">Precio de reserva no alcanzado</p>
+        </div>
+        <form id="form-puja" class="product-bid-form">
+          <div class="bid-input">
+            <label for="cantidad">Introduce tu puja</label>
+            <input type="number" id="cantidad" class="form-control" placeholder="€" required />
+          </div>
+           <div class="product-bid-form__actions">
+            <button type="submit" class="btn btn-primary">Pujar ahora</button>
+            <button type="button" id="btn-max-puja" class="btn btn-outline-primary">Máx</button>
+          </div>
+          </form>
+        <div class="product-summary__info">
+          <div>
+            <i class="fas fa-shield-alt"></i>
+            <span>Protección Biddable: custodia de pago y seguro antifraude (9% + €3)</span>
+          </div>
+          <div>
+            <i class="fas fa-truck"></i>
+            <span>Envío estimado: 22 € · 6–8 días laborables</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="product-details glass-panel">
+      <div class="product-tabs">
+        <button class="product-tab active" data-tab="descripcion">Descripción</button>
+        <button class="product-tab" data-tab="reseñas">Reseñas</button>
+        <button class="product-tab" data-tab="historial">Historial de pujas</button>
+      </div>
+      <div class="product-tab-panels">
+        <div id="descripcion" class="product-panel active">
+          <p id="descripcion-texto">Cargando descripción…</p>
+        </div>
+        <div id="reseñas" class="product-panel">
+          <div id="lista-reseñas" class="reviews-list"></div>
+          <form id="form-reseña" class="review-form">
+            <h3>Comparte tu experiencia</h3>
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label for="calificacion" class="form-label">Calificación</label>
+                <select id="calificacion" class="form-select" required>
+                  <option value="">Selecciona</option>
+                  <option value="1">★☆☆☆☆ (1)</option>
+                  <option value="2">★★☆☆☆ (2)</option>
+                  <option value="3">★★★☆☆ (3)</option>
+                  <option value="4">★★★★☆ (4)</option>
+                  <option value="5">★★★★★ (5)</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label for="comentario" class="form-label">Comentario</label>
+                <textarea id="comentario" rows="4" class="form-control" required placeholder="¿Qué destacas de esta subasta?"></textarea>
+              </div>
+            </div>
+            <div class="d-flex gap-3 align-items-center">
+              <button type="submit" class="btn btn-primary">Enviar reseña</button>
+              <p id="error-reseña" class="text-danger small mb-0"></p>
+            </div>
+          </form>
+        </div>
+        <div id="historial" class="product-panel">
+          <ul id="lista-pujas" class="bids-timeline"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+    <!-- Modal para mensaje al vendedor -->
+<div class="modal fade" id="modalMensaje" tabindex="-1" aria-labelledby="modalMensajeLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalMensajeLabel">Enviar mensaje al vendedor</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <textarea id="mensajeTexto" class="form-control" rows="4" placeholder="Escribe tu mensaje..."></textarea>
+        <div id="mensajeError" class="text-danger small mt-2"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" id="btnEnviarMensaje" class="btn btn-primary">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="notificacion-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;"></div>
+  <footer class="app-footer">
+    <div class="app-footer__inner">
+      <div class="app-footer__brand">
+        <a href="index.html" class="app-brand">
+          <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+          Biddable
+        </a>
+        <p>Marketplace de subastas premium con servicio concierge, verificación documental y pagos garantizados.</p>
+      </div>
+      <div class="app-footer__cols">
+        <div class="app-footer__col">
+          <h4>Explorar</h4>
+          <ul>
+            <li><a href="productos.html">Subastas activas</a></li>
+            <li><a href="misPujas.html">Mis pujas</a></li>
+            <li><a href="misProductos.html">Mi inventario</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Soporte</h4>
+          <ul>
+            <li><a href="mensajes.html">Centro de mensajes</a></li>
+            <li><a href="miCuenta.html">Preferencias de cuenta</a></li>
+            <li><a href="registro.html">Unirme a Biddable</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Términos de uso</a></li>
+            <li><a href="#">Política de privacidad</a></li>
+            <li><a href="#">Centro de confianza</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2025 Biddable. Todos los derechos reservados.</div>
+  </footer>
+
+  <div id="notificacion-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;"></div>
+  <script type="module" src="js/notificacion.module.js"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/producto.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: tienda-subastas
+    env: node
+    branch: main
+    buildCommand: "npm ci"
+    startCommand: "npm start"
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production

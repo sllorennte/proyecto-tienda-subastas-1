@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Nuevo Producto - Biddable</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap + Fuentes -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Estilos personalizados -->
+  <link rel="stylesheet" href="css/crearProducto.css">
+  <link rel="stylesheet" href="css/index.css" />
+  <link rel="stylesheet" href="css/theme.css" />
+</head>
+<body>
+<header class="app-header">
+    <div class="app-header__inner">
+      <a href="index.html" class="app-brand">
+        <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+        Biddable
+      </a>
+      <nav class="app-nav">
+        <a href="productos.html" class="is-active">Subastas</a>
+        <a href="misPujas.html">Mis pujas</a>
+        <a href="misProductos.html">Mis productos</a>
+        <a href="mensajes.html"><i class="fas fa-envelope"></i></a>
+        <a href="miCuenta.html"><i class="fas fa-user"></i></a>
+      </nav>
+      <div class="app-header__actions">
+        <a href="crearProducto.html" class="btn btn-outline-light">Vender un artículo</a>
+        <a href="productos.html" class="btn btn-primary">Explorar subastas</a>
+      </div>
+    </div>
+  </header>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Vender nuevo producto</h2>
+          <form id="form-crear-producto">
+            <div class="mb-3">
+              <label for="titulo" class="form-label">Título</label>
+              <input type="text" class="form-control" id="titulo" name="titulo" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="descripcion" class="form-label">Descripción</label>
+              <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label for="precioInicial" class="form-label">Precio inicial (€)</label>
+              <input type="number" class="form-control" id="precioInicial" name="precioInicial" required min="0" step="0.01">
+            </div>
+
+            <div class="mb-3">
+              <label for="imagenesFiles" class="form-label">Imágenes (sube desde tu ordenador)</label>
+              <input type="file" class="form-control" id="imagenesFiles" name="imagenesFiles" accept="image/*" multiple>
+              <div id="preview-imagenes" class="mt-2 d-flex gap-2 flex-wrap"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="fechaExpiracion" class="form-label">Fecha de expiración</label>
+              <input type="datetime-local" class="form-control" id="fechaExpiracion" name="fechaExpiracion" required>
+            </div>
+           
+             <div class="mb-3">
+               <label for="categoria" class="form-label">Categoría</label>
+               <select id="categoria" name="categoria" class="form-select">
+                 <option value="">Seleccione una categoría</option>
+                 <option value="tecnologia">Tecnología</option>
+                 <option value="moda">Moda</option>
+                 <option value="hogar">Hogar</option>
+                 <option value="coleccionismo">Coleccionismo</option>
+               </select>
+             </div>
+
+            <div id="error" class="text-danger mb-3" style="display:none;"></div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Crear producto</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <footer class="app-footer">
+    <div class="app-footer__inner">
+      <div class="app-footer__brand">
+        <a href="index.html" class="app-brand">
+          <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+          Biddable
+        </a>
+        <p>Marketplace de subastas premium con servicio concierge, verificación documental y pagos garantizados.</p>
+      </div>
+      <div class="app-footer__cols">
+        <div class="app-footer__col">
+          <h4>Explorar</h4>
+          <ul>
+            <li><a href="productos.html">Subastas activas</a></li>
+            <li><a href="misPujas.html">Mis pujas</a></li>
+            <li><a href="misProductos.html">Mi inventario</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Soporte</h4>
+          <ul>
+            <li><a href="mensajes.html">Centro de mensajes</a></li>
+            <li><a href="miCuenta.html">Preferencias de cuenta</a></li>
+            <li><a href="registro.html">Unirme a Biddable</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Términos de uso</a></li>
+            <li><a href="#">Política de privacidad</a></li>
+            <li><a href="#">Centro de confianza</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2025 Biddable. Todos los derechos reservados.</div>
+  </footer>
+
+  <!-- Contenedor para notificaciones -->
+  <div id="notificacion-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;"></div>
+
+  <!-- Config global para la API (debe cargarse antes de los módulos que usan `apiUrl`) -->
+  <script src="js/config.js"></script>
+  <!-- Script del formulario como módulo -->
+  <script type="module" src="js/crearProducto.js"></script>
+</body>
+</html>

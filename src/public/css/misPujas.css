@@ -1,0 +1,154 @@
+.bids-page {
+  padding-bottom: 5rem;
+}
+
+.bids-hero {
+  padding: 4.5rem 0 3.5rem;
+  color: #ffffff;
+  position: relative;
+}
+
+.bids-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(11, 61, 145, 0.92), rgba(6, 36, 90, 0.95));
+  z-index: 0;
+}
+
+.bids-hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+.bids-hero__content {
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.bids-hero__content h1 {
+  font-size: clamp(2.2rem, 3vw, 3.2rem);
+  margin: 0;
+}
+
+.bids-hero__content p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* Acciones */
+.bids-list {
+  margin-top: -100px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.bids-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.75rem;
+}
+
+.bid-card {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: var(--radius-lg);
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-base);
+}
+
+.bid-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+}
+
+.bid-card__header {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.bid-card__header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--brand-primary);
+}
+
+.bid-card__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(20, 184, 166, 0.12);
+  color: #0f766e;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.bid-card__meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  color: var(--brand-text-muted);
+}
+
+.bid-card__meta strong {
+  color: var(--brand-text);
+}
+
+.bid-card__actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: auto;
+}
+
+.bid-card__actions .btn {
+  flex: 1;
+}
+
+.bid-edit {
+  margin-top: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bid-edit__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Responsive */
+.empty-state {
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .bids-list {
+    margin-top: -60px;
+  }
+
+  .bid-card__meta {
+    grid-template-columns: 1fr;
+  }
+
+  .bid-card__actions {
+    flex-direction: column;
+  }
+
+  .bid-edit__actions {
+    flex-direction: column;
+  }
+}

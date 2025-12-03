@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mis Pujas – Biddable</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Bootstrap + Fuentes -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Estilos personalizados -->
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/misPujas.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a href="index.html" class="app-brand">
+        <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+        Biddable
+      </a>
+      <nav class="app-nav">
+        <a href="productos.html">Subastas</a>
+        <a href="misPujas.html" class="is-active">Mis pujas</a>
+        <a href="misProductos.html">Mis productos</a>
+        <a href="mensajes.html"><i class="fas fa-envelope"></i></a>
+        <a href="miCuenta.html"><i class="fas fa-user"></i></a>
+      </nav>
+      <div class="app-header__actions">
+        <a href="productos.html" class="btn btn-outline-light">Explorar nuevas subastas</a>
+        <a href="mensajes.html" class="btn btn-primary">Hablar con soporte</a>
+      </div>
+    </div>
+  </header>
+  <main class="bids-page">
+    <section class="bids-hero">
+      <div class="container">
+        <div class="bids-hero__content">
+          <span class="badge-premium"><i class="fas fa-bell"></i> Seguimiento inteligente</span>
+          <h1>Tus pujas al día</h1>
+          <p>Consulta el estado de cada lote, recibe recordatorios antes del cierre y ajusta tu estrategia en segundos.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bids-list container">
+      <div class="section-heading">
+        <div>
+          <h2 class="section-heading__title">Actividad reciente</h2>
+          <p class="section-heading__subtitle">Actualizamos cada pocos segundos para reflejar movimientos en tiempo real.</p>
+        </div>
+      </div>
+      <div id="lista-pujas" class="bids-grid">
+        <!-- Tarjetas dinámicas de pujas -->
+      </div>
+      <div id="sin-pujas" class="empty-state" style="display: none;">
+        <i class="fas fa-gavel"></i>
+        <h3>Aún no has pujado</h3>
+        <p>Explora subastas exclusivas y realiza tu primera oferta.</p>
+        <a href="productos.html" class="btn btn-primary">Descubrir subastas</a>
+      </div>
+    </section>
+  </main>
+<!-- Contenedor para notificaciones -->
+<div id="notificacion-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;"></div>
+<script src="js/config.js"></script>
+<script src="js/notificacion.fixed.js"></script>
+ <footer class="app-footer">
+    <div class="app-footer__inner">
+      <div class="app-footer__brand">
+        <a href="index.html" class="app-brand">
+          <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+          Biddable
+        </a>
+        <p>Monitorizamos tus pujas 24/7 para que no pierdas ninguna oportunidad estratégica.</p>
+      </div>
+      <div class="app-footer__cols">
+        <div class="app-footer__col">
+          <h4>Panel</h4>
+          <ul>
+            <li><a href="productos.html">Explorar subastas</a></li>
+            <li><a href="misProductos.html">Mis lotes</a></li>
+            <li><a href="misPujas.html">Actividad</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Soporte</h4>
+          <ul>
+            <li><a href="mensajes.html">Centro de mensajes</a></li>
+            <li><a href="miCuenta.html">Preferencias</a></li>
+            <li><a href="crearProducto.html">Publicar producto</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Recursos</h4>
+          <ul>
+            <li><a href="#">Consejos de puja</a></li>
+            <li><a href="#">Protección al comprador</a></li>
+            <li><a href="#">Acuerdos legales</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2025 Biddable. Todos los derechos reservados.</div>
+  </footer>
+  <script src="js/misPujas.js"></script>
+</body>
+</html>

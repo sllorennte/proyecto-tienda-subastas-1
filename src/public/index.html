@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Biddable | Subastas Exclusivas</title>
+
+  <!-- Bootstrap & Estilos -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a href="index.html" class="app-brand">
+        <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+        Biddable
+      </a>
+      <nav class="app-nav">
+        <a href="productos.html" class="is-active">Subastas</a>
+        <a href="misPujas.html">Mis pujas</a>
+        <a href="misProductos.html">Mis productos</a>
+        <a href="notificaciones.html" title="Notificaciones"><i class="fas fa-bell"></i></a>
+        <a href="transacciones.html" title="Transacciones"><i class="fas fa-receipt"></i></a>
+        <a href="favoritos.html" title="Favoritos"><i class="fas fa-heart"></i></a>
+        <a href="mensajes.html"><i class="fas fa-envelope"></i></a>
+        <a href="miCuenta.html"><i class="fas fa-user"></i></a>
+      </nav>
+      <div class="app-header__actions">
+        <a href="crearProducto.html" class="btn btn-outline-light">Vender un artículo</a>
+        <a href="productos.html" class="btn btn-primary">Explorar subastas</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="home-hero">
+      <div class="container">
+        <div class="home-hero__grid">
+          <div class="home-hero__content">
+            <span class="badge-premium"><i class="fas fa-shield-alt"></i> Subastas verificadas 24/7</span>
+            <h1>Descubre piezas únicas con la confianza de un marketplace de primer nivel.</h1>
+            <p>Conecta con coleccionistas y vendedores profesionales, recibe alertas en tiempo real y asegura las mejores oportunidades antes que nadie.</p>
+            <div class="home-hero__actions">
+              <a href="productos.html" class="btn btn-primary">Ver subastas activas</a>
+              <a href="misPujas.html" class="btn btn-outline-light">Revisar mis pujas</a>
+            </div>
+            <div class="home-hero__stats">
+              <div class="hero-stat">
+                <span>4.9/5</span>
+                <p>Experiencia valorada por compradores verificados</p>
+              </div>
+              <div class="hero-stat">
+                <span>12K+</span>
+                <p>Subastas premium cerradas en los últimos 12 meses</p>
+              </div>
+              <div class="hero-stat">
+                <span>&lt;2h</span>
+                <p>Tiempo medio de respuesta de vendedores certificados</p>
+              </div>
+            </div>
+          </div>
+          <div class="home-hero__visual">
+            <div class="hero-showcase">
+              <img src="uploads/gafasvr.jpg" alt="Gafas VR Meta Quest" class="hero-showcase__image" />
+              <div class="hero-showcase__badge">Última puja: 650€</div>
+              <div class="hero-showcase__details">
+                <h3>Meta Quest Pro</h3>
+                <p>Finaliza en 03:12:45</p>
+                <a href="producto.html?id=684ae522dd8f80b10f4de175" class="btn btn-outline-light">Pujar ahora</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="home-showcase">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <h2 class="section-heading__title">Subastas destacadas</h2>
+            <p class="section-heading__subtitle">Seleccionadas por nuestros expertos para asegurar autenticidad, trazabilidad y una experiencia de puja excepcional.</p>
+          </div>
+          <a href="productos.html" class="btn btn-outline-primary">Ver catálogo completo</a>
+        </div>
+        <div class="auction-grid">
+          <article class="auction-card">
+            <div class="auction-card__media">
+              <img src="uploads/gafasvr.jpg" alt="Gafas VR Meta Quest" />
+              <span class="auction-card__tag">Tecnología de élite</span>
+            </div>
+            <div class="auction-card__body">
+              <h3>Meta Quest Pro</h3>
+              <p>Estado impecable, con accesorios originales y garantía extendida.</p>
+              <div class="auction-card__meta">
+                <span><i class="fas fa-gavel"></i> 18 pujas activas</span>
+                <span><i class="fas fa-clock"></i> Finaliza en 3h</span>
+              </div>
+              <a href="producto.html?id=684ae522dd8f80b10f4de175" class="btn btn-primary w-100">Pujar desde 650€</a>
+            </div>
+          </article>
+          <article class="auction-card">
+            <div class="auction-card__media">
+              <img src="uploads/nike.jpg" alt="Zapatillas Nike Air Jordan" />
+              <span class="auction-card__tag">Edición limitada</span>
+            </div>
+            <div class="auction-card__body">
+              <h3>Nike Air Jordan Retro</h3>
+              <p>Lanzamiento 2024 “Reverse Mocha” con certificado de autenticidad.</p>
+              <div class="auction-card__meta">
+                <span><i class="fas fa-gavel"></i> 32 pujas activas</span>
+                <span><i class="fas fa-clock"></i> Finaliza en 7h</span>
+              </div>
+              <a href="producto.html?id=684ae624dd8f80b10f4de181" class="btn btn-primary w-100">Última puja 1.500€</a>
+            </div>
+          </article>
+          <article class="auction-card">
+            <div class="auction-card__media">
+              <img src="uploads/apple.jpg" alt="Apple Watch Series 8" />
+              <span class="auction-card__tag">Garantía oficial</span>
+            </div>
+            <div class="auction-card__body">
+              <h3>Apple Watch Series 8</h3>
+              <p>Sello precintado, envío express y asistencia de configuración premium.</p>
+              <div class="auction-card__meta">
+                <span><i class="fas fa-gavel"></i> 11 pujas activas</span>
+                <span><i class="fas fa-clock"></i> Finaliza en 12h</span>
+              </div>
+              <a href="producto.html?id=684ae76fdd8f80b10f4de19f" class="btn btn-primary w-100">Oferta vigente 250€</a>
+            </div>
+          </article>
+        </div>
+      </div>
+      </section>
+
+    <section class="home-benefits">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <h2 class="section-heading__title">La experiencia Biddable</h2>
+            <p class="section-heading__subtitle">Tecnología financiera, verificación documental y soporte humano para que cada transacción sea impecable.</p>
+          </div>
+        </div>
+        <div class="benefits-grid">
+          <article class="benefit-card">
+            <i class="fas fa-fingerprint"></i>
+            <h4>Identidad verificada</h4>
+            <p>Todos los vendedores pasan auditorías de autenticidad y reputación antes de publicar.</p>
+          </article>
+          <article class="benefit-card">
+            <i class="fas fa-bolt"></i>
+            <h4>Alertas inteligentes</h4>
+            <p>Configura alertas de precio máximo y recibe notificaciones en tiempo real.</p>
+          </article>
+          <article class="benefit-card">
+            <i class="fas fa-headset"></i>
+            <h4>Concierge dedicado</h4>
+            <p>Especialistas acompañan negociaciones de alto valor y gestionan la logística.</p>
+          </article>
+          <article class="benefit-card">
+            <i class="fas fa-shield-check"></i>
+            <h4>Protección total</h4>
+            <p>Cobertura antifraude, custodia de pagos y seguimiento hasta la entrega.</p>
+          </article>
+        </div>
+      </div>
+      </section>
+
+    <section class="home-cta">
+      <div class="container">
+        <div class="home-cta__panel">
+          <div>
+            <h2>Convierte tus activos en liquidez inmediata.</h2>
+            <p>Publica en minutos, recibe asesoría de precio y llega a una audiencia global de compradores.</p>
+          </div>
+          <div class="home-cta__actions">
+            <a href="crearProducto.html" class="btn btn-primary">Publicar mi primer lote</a>
+            <a href="mensajes.html" class="btn btn-outline-primary">Hablar con un especialista</a>
+          </div>
+        </div>
+      </div>
+      </section>
+  </main>
+<footer class="app-footer">
+    <div class="app-footer__inner">
+      <div class="app-footer__brand">
+        <a href="index.html" class="app-brand">
+          <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+          Biddable
+        </a>
+        <p>Marketplace de subastas premium con servicio concierge, verificación documental y pagos garantizados.</p>
+      </div>
+      <div class="app-footer__cols">
+        <div class="app-footer__col">
+          <h4>Explorar</h4>
+          <ul>
+            <li><a href="productos.html">Subastas activas</a></li>
+            <li><a href="misPujas.html">Mis pujas</a></li>
+            <li><a href="misProductos.html">Mi inventario</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Soporte</h4>
+          <ul>
+            <li><a href="mensajes.html">Centro de mensajes</a></li>
+            <li><a href="miCuenta.html">Preferencias de cuenta</a></li>
+            <li><a href="registro.html">Unirme a Biddable</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Términos de uso</a></li>
+            <li><a href="#">Política de privacidad</a></li>
+            <li><a href="#">Centro de confianza</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2025 Biddable. Todos los derechos reservados.</div>
+  </footer>
+   <div id="notificacion-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;"></div>
+  <script src="js/config.js"></script>
+  <script src="js/notificacion.fixed.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

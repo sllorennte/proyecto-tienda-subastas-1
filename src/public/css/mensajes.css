@@ -1,0 +1,87 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f0f2f5;
+}
+
+.nav-link {
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  color: #457b9d;
+}
+
+/* Tarjetas de mensaje */
+.mensaje-card {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.mensaje-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.mensaje-header strong {
+  font-size: 1rem;
+  color: #1d3557;
+}
+
+.mensaje-fecha {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.mensaje-texto {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.btn-responder {
+  background-color: #1d3557;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-responder:hover {
+  background-color: #457b9d;
+}
+
+/* Delete button style */
+.btn-eliminar {
+  border: 1px solid rgba(185, 28, 28, 0.15);
+  color: #b91c1c;
+  background: transparent;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+}
+
+.btn-eliminar:hover {
+  background: rgba(185, 28, 28, 0.06);
+}
+
+/* Slightly stronger card body spacing */
+.card-body p.card-text {
+  color: #1a1a1a;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .mensaje-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

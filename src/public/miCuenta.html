@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mi Cuenta - Biddable</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap y estilos -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/miCuenta.css" />
+  <link rel="stylesheet" href="css/index.css" />
+  <link rel="stylesheet" href="css/theme.css" />
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a href="index.html" class="app-brand">
+        <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+        Biddable
+      </a>
+      <nav class="app-nav">
+        <a href="productos.html" class="is-active">Subastas</a>
+        <a href="misPujas.html">Mis pujas</a>
+        <a href="misProductos.html">Mis productos</a>
+        <a href="notificaciones.html" title="Notificaciones"><i class="fas fa-bell"></i></a>
+        <a href="transacciones.html" title="Transacciones"><i class="fas fa-receipt"></i></a>
+        <a href="favoritos.html" title="Favoritos"><i class="fas fa-heart"></i></a>
+        <a href="mensajes.html"><i class="fas fa-envelope"></i></a>
+        <a href="miCuenta.html"><i class="fas fa-user"></i></a>
+      </nav>
+      <div class="app-header__actions">
+        <a href="crearProducto.html" class="btn btn-outline-light">Vender un artículo</a>
+        <a href="productos.html" class="btn btn-primary">Explorar subastas</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container my-5">
+    <div class="row">
+      <!-- Menú lateral -->
+      <aside class="col-md-3 mb-4">
+        <div class="card p-3 shadow-sm">
+          <div class="text-center mb-3">
+            <img src="uploads/avatar-default.svg" alt="Avatar" class="rounded-circle avatar-lg" />
+          </div>
+          <div class="text-center">
+            <div id="aside-username" class="fw-bold">Usuario</div>
+            <div id="aside-email" class="text-muted small">correo@ejemplo.com</div>
+          </div>
+          <hr />
+          <div class="d-grid gap-2 mt-2">
+            <a href="misPujas.html" class="btn btn-outline-secondary btn-sm">Mis pujas</a>
+            <a href="misProductos.html" class="btn btn-outline-secondary btn-sm">Mis productos</a>
+            <a href="favoritos.html" class="btn btn-outline-secondary btn-sm">Favoritos</a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CONTENIDO PRINCIPAL: solo configuración de cuenta -->
+      <section class="col-md-9">
+        <div id="configuracion" class="seccion-activa">
+          <h2 class="mb-4">Configuración de cuenta</h2>
+          <div class="profile-panel shadow-sm bg-white rounded p-4">
+            <div class="d-flex gap-4 align-items-start flex-column flex-md-row">
+              <div class="profile-avatar text-center text-md-start">
+                <div class="avatar-placeholder rounded-circle avatar-lg mb-3 d-flex align-items-center justify-content-center" aria-hidden="true">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z" fill="#6b7280"/><path d="M2 20c0-3.866 4.477-7 10-7s10 3.134 10 7v1H2v-1z" fill="#9ca3af"/></svg>
+                </div>
+                <div><strong id="perfil-username">Nombre</strong></div>
+                <small id="perfil-email" class="text-muted">correo@ejemplo.com</small>
+              </div>
+
+              <div class="profile-main flex-fill">
+                <form id="form-configuracion" class="row g-3">
+                  <div class="col-md-6">
+                    <label for="username-config" class="form-label">Nombre de usuario</label>
+                    <input type="text" id="username-config" name="username" class="form-control" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="email-config" class="form-label">Correo electrónico</label>
+                    <input type="email" id="email-config" name="email" class="form-control" required>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="password-config" class="form-label">Cambiar contraseña</label>
+                    <input type="password" id="password-config" name="password" class="form-control" placeholder="Nueva contraseña">
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="notificaciones" class="form-label">Notificaciones</label>
+                    <select id="notificaciones" class="form-select">
+                      <option value="email">Email</option>
+                      <option value="push">Push</option>
+                      <option value="none">No recibir</option>
+                    </select>
+                  </div>
+
+                  <div class="col-12 d-flex justify-content-between align-items-center mt-2">
+                    <div>
+                      <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                      <button type="button" id="btn-logout" class="btn btn-outline-secondary ms-2">Cerrar sesión</button>
+                    </div>
+                    <small class="text-muted">Última actualización: <span id="last-updated">—</span></small>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+  </main>
+<!-- Contenedor para notificaciones -->
+<div id="notificacion-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;"></div>
+
+  <footer class="app-footer">
+    <div class="app-footer__inner">
+      <div class="app-footer__brand">
+        <a href="index.html" class="app-brand">
+          <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+          Biddable
+        </a>
+        <p>Marketplace de subastas premium con servicio concierge, verificación documental y pagos garantizados.</p>
+      </div>
+      <div class="app-footer__cols">
+        <div class="app-footer__col">
+          <h4>Explorar</h4>
+          <ul>
+            <li><a href="productos.html">Subastas activas</a></li>
+            <li><a href="misPujas.html">Mis pujas</a></li>
+            <li><a href="misProductos.html">Mi inventario</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Soporte</h4>
+          <ul>
+            <li><a href="mensajes.html">Centro de mensajes</a></li>
+            <li><a href="miCuenta.html">Preferencias de cuenta</a></li>
+            <li><a href="registro.html">Unirme a Biddable</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Términos de uso</a></li>
+            <li><a href="#">Política de privacidad</a></li>
+            <li><a href="#">Centro de confianza</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2025 Biddable. Todos los derechos reservados.</div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/notificacion.fixed.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/miCuenta.js"></script>
+</body>
+</html>

@@ -1,0 +1,407 @@
+:root {
+  --brand-primary: #0b3d91;
+  --brand-primary-dark: #06245a;
+  --brand-secondary: #f8b400;
+  --brand-secondary-dark: #d99600;
+  --brand-accent: #14b8a6;
+  --brand-surface: #ffffff;
+  --brand-surface-muted: #f4f6fb;
+  --brand-outline: rgba(11, 61, 145, 0.15);
+  --brand-outline-strong: rgba(11, 61, 145, 0.35);
+  --brand-text: #777777;
+  --brand-text-muted: #64748b;
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.12);
+  --shadow-hover: 0 22px 50px rgba(15, 23, 42, 0.18);
+  --shadow-card: 0 12px 28px rgba(15, 23, 42, 0.12);
+  --transition-base: all 0.25s ease;
+}
+
+* {
+    --brand-text-muted: #64748b;
+    --brand-text-on-dark: rgba(255, 255, 255, 0.94);
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(180deg, #050b1a 0%, #0c1733 45%, var(--brand-surface-muted) 100%);
+  color: var(--brand-text);
+  min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+    /* Base color for the dark background (hero/overall).
+       Elements with white surfaces override to --brand-text explicitly. */
+    color: var(--brand-text-on-dark);
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(20, 184, 166, 0.22), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(248, 180, 0, 0.18), transparent 40%),
+    radial-gradient(circle at 40% 90%, rgba(11, 61, 145, 0.25), transparent 55%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+a {
+    color: var(--brand-text);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--brand-secondary);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+    /* Force dark text inside white surfaces */
+    color: var(--brand-text) !important;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1050;
+  background: rgba(5, 12, 30, 0.88);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 35px rgba(2, 6, 23, 0.45);
+}
+
+.app-header__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.1rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+}
+
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem; /* reduced gap so brand is more left-aligned */
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.35rem; /* slightly smaller to free horizontal space */
+  letter-spacing: 0.02em;
+}
+
+.app-brand img {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+}
+
+/* Make the logo appear white regardless of source color (works for raster images too).
+   For SVGs that respect currentColor this is unnecessary but harmless. */
+.app-brand img {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.app-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.app-nav a {
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 500;
+  font-size: 0.95rem;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.app-nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(248, 180, 0, 0.9), transparent);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: var(--transition-base);
+}
+
+.app-nav a:hover::after,
+.app-nav a.is-active::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.app-nav a:hover {
+  color: #ffffff;
+}
+
+.app-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn {
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 1.3rem;
+  transition: var(--transition-base);
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--brand-secondary), #ffd760);
+  color: #1a1a1a;
+  box-shadow: 0 12px 25px rgba(248, 180, 0, 0.35);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #ffd760, var(--brand-secondary));
+  box-shadow: 0 16px 32px rgba(248, 180, 0, 0.45);
+}
+
+.btn-outline-primary {
+  background: transparent;
+  color: var(--brand-primary);
+  border: 1px solid var(--brand-outline-strong);
+}
+
+.btn-outline-primary:hover {
+  background: rgba(11, 61, 145, 0.08);
+  color: var(--brand-primary-dark);
+  border-color: var(--brand-primary);
+}
+
+.btn-outline-light {
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.75);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.section-heading__title {
+  font-size: 2rem;
+  color: var(--brand-text);
+  font-weight: 700;
+}
+
+.section-heading__subtitle {
+  color: var(--brand-text-muted);
+  max-width: 540px;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 2.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+}
+
+.card,
+.table,
+.list-group-item {
+  border-radius: var(--radius-md) !important;
+  border: 1px solid rgba(15, 23, 42, 0.07) !important;
+  box-shadow: var(--shadow-card);
+  background: rgba(255, 255, 255, 0.98) !important;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+}
+
+.card-title {
+  font-weight: 700;
+  color: var(--brand-primary);
+}
+
+.badge-premium {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(248, 180, 0, 0.16);
+  color: var(--brand-secondary-dark);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(20, 184, 166, 0.12);
+  color: #0f766e;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.form-control,
+.form-select {
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--brand-outline);
+  padding: 0.75rem 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 4px rgba(11, 61, 145, 0.1);
+}
+
+.table thead {
+  background: rgba(11, 61, 145, 0.08);
+}
+
+.table thead th {
+  border-bottom: none !important;
+  color: var(--brand-primary);
+  font-weight: 700;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.app-footer {
+  background: rgba(5, 12, 30, 0.92);
+  color: rgba(255, 255, 255, 0.72);
+  padding: 2.5rem 1.5rem;
+  margin-top: 4rem;
+}
+
+.app-footer__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.app-footer a {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.app-footer a:hover {
+  color: var(--brand-secondary);
+}
+
+.app-footer__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 260px;
+}
+
+.app-footer__cols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+}
+
+.app-footer__col h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.app-footer__col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.footer-bottom {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.toast-container .toast {
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--brand-outline);
+  box-shadow: var(--shadow-card);
+}
+
+@media (max-width: 992px) {
+  .app-header__inner {
+    padding: 1rem 1.5rem;
+    flex-wrap: wrap;
+    row-gap: 1rem;
+  }
+  .app-nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .app-header__actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-nav {
+    flex-wrap: wrap;
+    row-gap: 0.75rem;
+  }
+
+  .app-header__inner {
+    padding: 0.9rem 1.25rem;
+  }
+
+  .glass-panel {
+    padding: 1.5rem;
+  }
+
+  .section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .section-heading__title {
+    font-size: 1.65rem;
+  }
+}

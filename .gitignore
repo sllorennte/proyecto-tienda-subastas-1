@@ -1,0 +1,5 @@
+.vercel
+node_modules_tmp_rebase/
+node_modules/
+
+.env

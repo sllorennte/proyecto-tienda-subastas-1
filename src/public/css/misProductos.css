@@ -1,0 +1,161 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8f9fa;
+  color: #1d1d1d;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  padding-bottom: 4rem;
+}
+
+h2 {
+  color: #1d3557;
+}
+
+.btn-primary {
+  background-color: #1d3557;
+  border: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #457b9d;
+}
+
+#lista-mis-productos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Tarjeta individual */
+.producto-card {
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.3s ease;
+}
+
+.producto-card:hover {
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* Imagen del producto */
+.producto-card .thumb {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background-color: #e0e6ef;
+}
+
+/* Contenido */
+.producto-card .contenido {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.producto-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1d3557;
+}
+
+.producto-card p {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+.producto-card .precio {
+  font-weight: 700;
+  color: #457b9d;
+}
+
+.producto-card .acciones {
+  margin-top: auto;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.producto-card .acciones a {
+  background-color: #1d3557;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.producto-card .acciones a:hover {
+  background-color: #457b9d;
+}
+.card {
+  height: 100%;
+}
+
+.card-img-top {
+  object-fit: cover;
+  width: 100%;
+  height: 180px;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  text-align: center;
+  padding: 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+#lista-mis-productos .card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#lista-mis-productos .card-img-top {
+  object-fit: cover;
+  height: 180px;
+  width: 100%;
+}
+
+#lista-mis-productos .card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  #lista-mis-productos {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+
+  .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}

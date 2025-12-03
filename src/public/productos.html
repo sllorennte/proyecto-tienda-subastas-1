@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Productos - Tienda de Subastas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Google Fonts Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Estilos personalizados -->
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/productos.css" />
+  </head>
+<body>
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a href="index.html" class="app-brand">
+        <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+        Biddable
+      </a>
+      <nav class="app-nav">
+        <a href="productos.html" class="is-active">Subastas</a>
+        <a href="misPujas.html">Mis pujas</a>
+        <a href="misProductos.html">Mis productos</a>
+  <a href="notificaciones.html" title="Notificaciones"><i class="fas fa-bell"></i></a>
+  <a href="transacciones.html" title="Transacciones"><i class="fas fa-receipt"></i></a>
+  <a href="favoritos.html" title="Favoritos"><i class="fas fa-heart"></i></a>
+  <a href="mensajes.html"><i class="fas fa-envelope"></i></a>
+  <a href="miCuenta.html"><i class="fas fa-user"></i></a>
+      </nav>
+      <div class="app-header__actions">
+        <a href="crearProducto.html" class="btn btn-outline-light">Vender un artículo</a>
+        <a href="misPujas.html" class="btn btn-primary">Ver mis pujas</a>
+      </div>
+    </div>
+  </header>
+  <main class="products-page">
+    <section class="products-hero">
+      <div class="container">
+        <div class="products-hero__layout">
+          <div>
+            <span class="badge-premium"><i class="fas fa-chart-line"></i> Inventario actualizado cada hora</span>
+            <h1>Subastas disponibles</h1>
+            <p>Explora lotes curados por especialistas, con historiales de pujas transparentes y garantía de autenticidad.</p>
+          </div>
+          <a href="mensajes.html" class="btn btn-outline-light">Solicitar asesoría personalizada</a>
+        </div>
+      </div>
+    </section>
+    <section class="products-layout container">
+      <aside class="filters-panel glass-panel">
+        <div class="filters-panel__header">
+          <h2>Filtrar subastas</h2>
+          <p>Define un rango de inversión y descubre oportunidades a tu medida.</p>
+        </div>
+        <form id="form-filtros" class="filters-grid">
+          <label class="filter-field">
+            <span>Precio mínimo (€)</span>
+            <input type="number" id="precio-min" name="precioMin" min="0" step="0.01" placeholder="0.00" class="form-control" />
+          </label>
+          <label class="filter-field">
+            <span>Precio máximo (€)</span>
+            <input type="number" id="precio-max" name="precioMax" min="0" step="0.01" placeholder="2.500,00" class="form-control" />
+          </label>
+          <label class="filter-field">
+            <span>Caduca antes de</span>
+            <input type="date" id="fecha-expiracion" name="fechaExpiracion" class="form-control" />
+          </label>
+          <label class="filter-field">
+            <span>Categoría</span>
+            <select id="categoria" name="categoria" class="form-select">
+              <option value="">Todas las categorías</option>
+            </select>
+          </label>
+          <div class="filters-actions">
+            <button type="submit" class="btn btn-primary">Aplicar filtros</button>
+            <button type="button" class="btn btn-outline-primary" id="btn-limpiar">Limpiar todo</button>
+          </div>
+        </form>
+        <div class="filters-footnote">
+          <i class="fas fa-bell"></i>
+          <span>Crea alertas para recibir notificaciones cuando aparezcan nuevos lotes en tu rango.</span>
+        </div>
+        </aside>
+
+      <section class="results-panel">
+        <div class="section-heading">
+          <div>
+            <h2 class="section-heading__title">Resultados</h2>
+            <p class="section-heading__subtitle">Ordenados por relevancia y actividad reciente de pujas.</p>
+          </div>
+          <div class="d-flex align-items-center">
+            <a href="subastas-finalizadas.html" class="btn btn-outline-secondary me-2"><i class="fas fa-check-circle"></i> Ver finalizadas</a>
+            <div class="results-badge">
+              <i class="fas fa-bolt"></i> Actualización en tiempo real
+            </div>
+          </div>
+        </div>
+        <div id="lista-productos" class="product-grid">
+          <!-- Productos dinámicos -->
+        </div>
+          <!-- Paginación -->
+          <nav id="paginacion" class="mt-4" aria-label="Paginación">
+            <!-- Controles generados por JS -->
+          </nav>
+        <div id="sin-productos" class="empty-state d-none">
+          <i class="fas fa-search"></i>
+          <h3>Sin resultados con estos filtros</h3>
+          <p>Amplía el rango de precios o selecciona otra categoría para descubrir más oportunidades.</p>
+        </div>
+      </section>
+    </section>
+    </main>
+    <footer class="app-footer">
+    <div class="app-footer__inner">
+      <div class="app-footer__brand">
+        <a href="index.html" class="app-brand">
+          <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+          Biddable
+        </a>
+        <p>El ecosistema de subastas que conecta vendedores profesionales con compradores exigentes.</p>
+      </div>
+      <div class="app-footer__cols">
+        <div class="app-footer__col">
+          <h4>Descubrir</h4>
+          <ul>
+            <li><a href="productos.html">Subastas en vivo</a></li>
+            <li><a href="misPujas.html">Historial de pujas</a></li>
+            <li><a href="misProductos.html">Mis lotes</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Servicios</h4>
+          <ul>
+            <li><a href="mensajes.html">Mesa de ayuda</a></li>
+            <li><a href="miCuenta.html">Gestión de cuenta</a></li>
+            <li><a href="crearProducto.html">Publicar un producto</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Recursos</h4>
+          <ul>
+            <li><a href="#">Guía para vendedores</a></li>
+            <li><a href="#">Guía para compradores</a></li>
+            <li><a href="#">Preguntas frecuentes</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2025 Biddable. Todos los derechos reservados.</div>
+  </footer>
+  <div id="notificacion-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;"></div>
+  <script src="js/config.js"></script>
+  <script src="js/notificacion.fixed.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="js/productos.js"></script>
+</body>
+</html>
