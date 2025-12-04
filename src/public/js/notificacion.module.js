@@ -55,17 +55,32 @@ function updateBadge(count) {
 }
 
 try {
-  if (typeof window !== 'undefined' && window.io && _token_noti) {
-    const socket = io();
+  function initSocketAndJoin() {
+    if (typeof window === 'undefined' || !window.io || !_token_noti) return false;
+    const socket = io(window.SOCKET_URL || undefined);
     try {
       const payload = JSON.parse(atob(_token_noti.split('.')[1]));
       const uid = payload.id || payload._id;
       if (uid) socket.emit('joinUser', uid);
     } catch (e) { }
     socket.on('notificacion', () => fetchUnreadCount());
+    return true;
+  }
+
+  // Try to initialize immediately; if Socket.IO script hasn't loaded yet, poll briefly
+  if (!initSocketAndJoin()) {
+    let attempts = 0;
+    const iv = setInterval(() => {
+      attempts += 1;
+      if (initSocketAndJoin() || attempts >= 10) clearInterval(iv);
+    }, 500);
   }
 } catch (e) { }
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('load', () => fetchUnreadCount());
+  window.addEventListener('load', () => {
+    fetchUnreadCount();
+    // ensure socket init is attempted on load as well
+    try { if (typeof initSocketAndJoin === 'function') initSocketAndJoin(); } catch (e) {}
+  });
 }
