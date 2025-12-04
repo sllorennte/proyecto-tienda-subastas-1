@@ -35,7 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const titulo = document.getElementById('titulo').value.trim();
     const descripcion = document.getElementById('descripcion').value.trim();
     const precioInicialRaw = document.getElementById('precioInicial').value;
-    const imagenesRaw = document.getElementById('imagenes').value.trim();
+    // Las imágenes se toman del input file `imagenesFiles` (variable `inputImagenes`),
+    // no existe un elemento con id="imagenes" en el HTML, por eso evitamos buscarlo.
     const fechaExpiracionRaw = document.getElementById('fechaExpiracion').value;
 
     if (!titulo) {
