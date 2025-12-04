@@ -1,5 +1,6 @@
 const Puja     = require('../modelos/Puja');
 const Producto = require('../modelos/Producto');
+const Notificacion = require('../modelos/Notificacion');
 
 exports.crearPuja = async (req, res) => {
   try {
@@ -64,6 +65,34 @@ exports.crearPuja = async (req, res) => {
       }
     } catch (e) {
       console.warn('No se pudo emitir evento Socket.IO:', e.message || e);
+    }
+
+    // Crear una notificación persistente para el vendedor y emitir un evento a su sala
+    try {
+      const vendedorId = producto.vendedor ? String(producto.vendedor) : null;
+      if (vendedorId && vendedorId !== String(pujador)) {
+        const titulo = 'Nueva puja en tu producto';
+        const texto = `Tu producto "${producto.titulo}" ha recibido una puja de €${cantidad.toFixed(2)}.`;
+        const link = `/producto.html?id=${productoId}`;
+        // Guardar notificación en BD
+        try {
+          await Notificacion.create({ usuario: vendedorId, tipo: 'puja', titulo, texto, link });
+        } catch (saveErr) {
+          console.warn('No se pudo guardar notificación:', saveErr && saveErr.message ? saveErr.message : saveErr);
+        }
+
+        // Emitir evento para que el cliente actualice badge/unread
+        try {
+          const io = req.app && req.app.locals && req.app.locals.io;
+          if (io) {
+            io.to(`user_${vendedorId}`).emit('notificacion', { producto: productoId, cantidad });
+          }
+        } catch (emitErr) {
+          console.warn('No se pudo emitir evento de notificación Socket.IO:', emitErr && emitErr.message ? emitErr.message : emitErr);
+        }
+      }
+    } catch (e) {
+      console.warn('Error procesando notificacion post-puja:', e && e.message ? e.message : e);
     }
 
     res.status(201).json({ mensaje: 'Puja registrada', puja });
