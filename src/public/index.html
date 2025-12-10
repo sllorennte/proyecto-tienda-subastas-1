@@ -65,10 +65,10 @@
           <div class="home-hero__visual">
             <div class="hero-showcase">
               <img src="uploads/gafasvr.jpg" alt="Gafas VR Meta Quest" class="hero-showcase__image" />
-              <div class="hero-showcase__badge">Última puja: 650€</div>
+              <div class="hero-showcase__badge">Precio inicial: 650€</div>
               <div class="hero-showcase__details">
                 <h3>Meta Quest Pro</h3>
-                <p>Finaliza en 03:12:45</p>
+                <p>Finaliza pronto...</p>
                 <a href="producto.html?id=684ae522dd8f80b10f4de175" class="btn btn-outline-light">Pujar ahora</a>
               </div>
             </div>
@@ -95,8 +95,8 @@
               <h3>Meta Quest Pro</h3>
               <p>Estado impecable, con accesorios originales y garantía extendida.</p>
               <div class="auction-card__meta">
-                <span><i class="fas fa-gavel"></i> 18 pujas activas</span>
-                <span><i class="fas fa-clock"></i> Finaliza en 3h</span>
+                <span><i class="fas fa-gavel"></i> 18 usuario lo han visitado</span>
+                <span><i class="fas fa-clock"></i> Últimas horas</span>
               </div>
               <a href="producto.html?id=684ae522dd8f80b10f4de175" class="btn btn-primary w-100">Pujar desde 650€</a>
             </div>
@@ -110,10 +110,10 @@
               <h3>Nike Air Jordan Retro</h3>
               <p>Lanzamiento 2024 “Reverse Mocha” con certificado de autenticidad.</p>
               <div class="auction-card__meta">
-                <span><i class="fas fa-gavel"></i> 32 pujas activas</span>
-                <span><i class="fas fa-clock"></i> Finaliza en 7h</span>
+                <span><i class="fas fa-gavel"></i> 32 usuario lo han visitado</span>
+                <span><i class="fas fa-clock"></i> Últimas horas</span>
               </div>
-              <a href="producto.html?id=684ae624dd8f80b10f4de181" class="btn btn-primary w-100">Última puja 1.500€</a>
+              <a href="producto.html?id=684ae624dd8f80b10f4de181" class="btn btn-primary w-100">Pujar desde 1.500€</a>
             </div>
           </article>
           <article class="auction-card">
@@ -125,10 +125,10 @@
               <h3>Apple Watch Series 8</h3>
               <p>Sello precintado, envío express y asistencia de configuración premium.</p>
               <div class="auction-card__meta">
-                <span><i class="fas fa-gavel"></i> 11 pujas activas</span>
-                <span><i class="fas fa-clock"></i> Finaliza en 12h</span>
+                <span><i class="fas fa-gavel"></i> 11 usuario lo han visitado</span>
+                <span><i class="fas fa-clock"></i> Últimas horas</span>
               </div>
-              <a href="producto.html?id=684ae76fdd8f80b10f4de19f" class="btn btn-primary w-100">Oferta vigente 250€</a>
+              <a href="producto.html?id=684ae76fdd8f80b10f4de19f" class="btn btn-primary w-100">Pujar desde 250€</a>
             </div>
           </article>
         </div>
@@ -175,9 +175,9 @@
             <h2>Convierte tus activos en liquidez inmediata.</h2>
             <p>Publica en minutos, recibe asesoría de precio y llega a una audiencia global de compradores.</p>
           </div>
-          <div class="home-cta__actions">
+            <div class="home-cta__actions">
             <a href="crearProducto.html" class="btn btn-primary">Publicar mi primer lote</a>
-            <a href="mensajes.html" class="btn btn-outline-primary">Hablar con un especialista</a>
+            <a href="mensajes.html" class="btn btn-outline-primary" id="btn-soporte">Contactar con soporte</a>
           </div>
         </div>
       </div>
@@ -225,5 +225,80 @@
   <script src="js/config.js"></script>
   <script src="js/notificacion.fixed.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Modal para contactar con soporte -->
+  <div class="modal fade" id="modalSoporte" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Contactar con soporte</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <textarea id="soporte-texto" class="form-control" rows="5" placeholder="Escribe tu consulta para el equipo de soporte..."></textarea>
+          <div id="soporte-error" class="text-danger small mt-2"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btn-enviar-soporte" class="btn btn-primary">Enviar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    document.addEventListener('DOMContentLoaded', function(){
+      var soporteBtn = document.getElementById('btn-soporte');
+      if (!soporteBtn) return;
+      var modalEl = document.getElementById('modalSoporte');
+      var modal = new bootstrap.Modal(modalEl);
+      var textarea = document.getElementById('soporte-texto');
+      var errorEl = document.getElementById('soporte-error');
+      var btnEnviar = document.getElementById('btn-enviar-soporte');
+
+      soporteBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        errorEl.textContent = '';
+        textarea.value = '';
+        modal.show();
+      });
+
+      btnEnviar.addEventListener('click', async function(){
+        errorEl.textContent = '';
+        var texto = (textarea.value || '').trim();
+        if (!texto) { errorEl.textContent = 'Escribe un mensaje antes de enviar.'; return; }
+        var token = localStorage.getItem('token');
+        if (!token) { window.location.href = 'login.html'; return; }
+
+        try {
+          // Buscar usuario admin (primer usuario con rol 'admin')
+          var resUsers = await fetch(apiUrl('/api/usuarios'));
+          if (!resUsers.ok) throw new Error('No se pudo obtener usuarios');
+          var users = await resUsers.json();
+          var admin = (users || []).find(u => u.rol === 'admin');
+          if (!admin) { errorEl.textContent = 'No se encontró un administrador en el sistema.'; return; }
+
+          // Enviar mensaje
+          var resp = await fetch(apiUrl('/api/mensajes'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ destinatario: admin._id, texto })
+          });
+          if (!resp.ok) {
+            var err = await resp.json().catch(()=>({}));
+            errorEl.textContent = err && err.error ? err.error : 'Error al enviar el mensaje';
+            return;
+          }
+          modal.hide();
+          try { if (window.mostrarNotificacion) window.mostrarNotificacion('Mensaje enviado al soporte', 'success'); }
+          catch(e){}
+        } catch (err) {
+          console.error(err);
+          errorEl.textContent = 'Error de red al enviar el mensaje.';
+        }
+      });
+    });
+  })();
+  </script>
 </body>
 </html>
