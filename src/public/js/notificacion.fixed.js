@@ -79,3 +79,24 @@ if (typeof window !== 'undefined') {
     try { if (typeof initSocketAndJoin === 'function') initSocketAndJoin(); } catch (e) {}
   });
 }
+
+// Resaltar el enlace activo del header según la página actual
+function activarNavSegunPagina() {
+  try {
+    const path = window.location.pathname.split('/').pop() || 'index.html';
+    const page = (path === '' ? 'index.html' : path);
+    const anchors = document.querySelectorAll('.app-nav a');
+    anchors.forEach(a => a.classList.remove('is-active'));
+    if (page === 'index.html') return; // no resaltar nada en la home
+    anchors.forEach(a => {
+      const href = a.getAttribute('href') || '';
+      const file = href.split('/').pop();
+      if (!file) return;
+      if (file === page) a.classList.add('is-active');
+      // páginas dinámicas como producto.html?id=... deben resaltar 'productos'
+      if (page.startsWith('producto.html') && file === 'productos.html') a.classList.add('is-active');
+    });
+  } catch (e) {}
+}
+
+try { window.addEventListener('DOMContentLoaded', activarNavSegunPagina); } catch (e) {}
