@@ -35,7 +35,10 @@ function renderFavoritos(items) {
         <h3>${p.titulo || 'Producto'}</h3>
         <p>${(p.descripcion || '').slice(0,120)}</p>
         <div class="product-card__meta">
-          <span><strong>Precio:</strong> ${p.precio ? '€' + Number(p.precio).toFixed(2) : '—'}</span>
+          <span><strong>Precio:</strong> ${(() => {
+            const precioVal = (p.precioFinal != null) ? p.precioFinal : ((p.precioInicial != null) ? p.precioInicial : p.precio);
+            return (precioVal != null && !isNaN(Number(precioVal))) ? '€' + Number(precioVal).toFixed(2) : '—';
+          })()}</span>
           <span><strong>Categoría:</strong> ${p.categoria || '—'}</span>
         </div>
         <div class="product-card__actions">

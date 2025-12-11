@@ -2,6 +2,13 @@ const token = localStorage.getItem('token');
 const list = document.getElementById('trans-list');
 const pagination = document.getElementById('trans-pagination');
 let page = 1, limit = 20;
+// Modal delete elements
+const deleteModalEl = document.getElementById('deleteTransactionModal');
+const deleteMessageEl = document.getElementById('delete-transaction-message');
+const confirmDeleteBtn = document.getElementById('confirm-delete-transaction');
+let bsDeleteModal = null;
+try { if (window.bootstrap && deleteModalEl) bsDeleteModal = new bootstrap.Modal(deleteModalEl); } catch (e) { bsDeleteModal = null; }
+let pendingDeleteId = null;
 
 async function loadTransacciones() {
   try {
@@ -16,13 +23,41 @@ async function loadTransacciones() {
 function render(items) {
   if (!items.length) { list.innerHTML = '<p>No hay transacciones.</p>'; return; }
   list.innerHTML = '';
+  const nf = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
   items.forEach(t => {
+    const tipoLabel = (t.tipo === 'recibo') ? 'Subasta ganada' : (typeof t.tipo === 'string' ? (t.tipo.charAt(0).toUpperCase() + t.tipo.slice(1)) : t.tipo);
+    const importeNum = t.importe != null ? Number(t.importe) : null;
+    const importeText = (importeNum != null && !isNaN(importeNum)) ? nf.format(importeNum) : '—';
+
     const div = document.createElement('div');
     div.className = 'card mb-2';
     div.style.padding = '0.9rem';
-    div.innerHTML = `<div style="display:flex;justify-content:space-between"><div><strong>${t.tipo}</strong><div style="color:var(--brand-text-muted)">${t.producto ? t.producto.titulo : 'Producto eliminado'}</div></div><div><strong>${t.importe} USD</strong><div style="color:var(--brand-text-muted)">${new Date(t.fecha).toLocaleString()}</div></div></div>`;
+    div.dataset.id = t._id;
+    div.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem">
+        <div style="flex:1">
+          <strong>${tipoLabel}</strong>
+          <div style="color:var(--brand-text-muted)">${t.producto ? t.producto.titulo : 'Producto eliminado'}</div>
+        </div>
+        <div style="text-align:right">
+          <strong>${importeText}</strong>
+          <div style="color:var(--brand-text-muted)">${new Date(t.fecha).toLocaleString()}</div>
+          <div style="margin-top:6px"><button class="btn btn-sm btn-outline-danger btn-delete-trans" data-id="${t._id}">Eliminar</button></div>
+        </div>
+      </div>
+    `;
     list.appendChild(div);
   });
+
+  // attach delete handlers
+  list.querySelectorAll('.btn-delete-trans').forEach(btn => btn.addEventListener('click', (e) => {
+    const id = e.currentTarget.dataset.id;
+    pendingDeleteId = id;
+    const card = e.currentTarget.closest('.card');
+    const title = card ? card.querySelector('strong').textContent : 'transacción';
+    deleteMessageEl.textContent = `¿Eliminar ${title}? Esta acción no se puede deshacer.`;
+    try { if (bsDeleteModal) bsDeleteModal.show(); } catch (err) { if (confirm('Eliminar transacción?')) doDelete(); }
+  }));
 }
 
 function buildPagination(total, currentPage, pageSize) {
@@ -39,3 +74,26 @@ function buildPagination(total, currentPage, pageSize) {
 }
 
 loadTransacciones();
+
+// confirm delete action
+if (confirmDeleteBtn) {
+  confirmDeleteBtn.addEventListener('click', async () => {
+    if (!pendingDeleteId) return;
+    confirmDeleteBtn.disabled = true;
+    try {
+      const res = await fetch(apiUrl(`/api/transacciones/${pendingDeleteId}`), { method: 'DELETE', headers: { Authorization: 'Bearer ' + token } });
+      if (!res.ok) throw new Error('Error eliminando');
+      // remove from DOM
+      const el = list.querySelector(`div.card[data-id="${pendingDeleteId}"]`);
+      if (el) el.remove();
+      if (typeof mostrarNotificacion === 'function') mostrarNotificacion('Transacción eliminada', 'success');
+    } catch (err) {
+      console.error(err);
+      if (typeof mostrarNotificacion === 'function') mostrarNotificacion('No se pudo eliminar la transacción', 'danger');
+    } finally {
+      pendingDeleteId = null;
+      confirmDeleteBtn.disabled = false;
+      try { if (bsDeleteModal) bsDeleteModal.hide(); } catch (e) {}
+    }
+  });
+}

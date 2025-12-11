@@ -114,6 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const card = document.createElement('article');
         card.className = 'product-card';
         card.innerHTML = `
+          <button class="product-card__fav fav-toggle ${favoritosSet.has(String(p._id)) ? 'favorited' : ''}" data-id="${p._id}" title="Añadir a favoritos">
+            <i class="${favoritosSet.has(String(p._id)) ? 'fas' : 'far'} fa-heart"></i>
+          </button>
           <div class="product-card__media"><img src="${primeraImagen}" alt="${p.titulo}"></div>
           <div class="product-card__body">
             <h3>${p.titulo}</h3>
@@ -126,9 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="product-card__actions">
               <a href="producto.html?id=${p._id}" class="btn btn-primary">Ver subasta</a>
-              <button class="btn btn-outline-primary fav-toggle mt-2" data-id="${p._id}" title="Añadir a favoritos">
-                <i class="${favoritosSet.has(String(p._id)) ? 'fas' : 'far'} fa-heart"></i>
-              </button>
             </div>
           </div>
         `;
@@ -228,6 +228,8 @@ document.addEventListener('DOMContentLoaded', () => {
         icon.classList.toggle('fas', favoritosSet.has(String(id)));
         icon.classList.toggle('far', !favoritosSet.has(String(id)));
       }
+      // marcar el botón visualmente
+      try { btn.classList.toggle('favorited', favoritosSet.has(String(id))); } catch (e) {}
     } catch (err) {
       console.error('Error toggling favorito', err);
       alert('Error al actualizar favoritos');

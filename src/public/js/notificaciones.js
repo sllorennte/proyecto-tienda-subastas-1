@@ -1,6 +1,7 @@
 // Assumes token is stored in localStorage as 'token'
 const token = localStorage.getItem('token');
 const notiList = document.getElementById('noti-list');
+const notiEmpty = document.getElementById('noti-empty');
 
 async function loadNotificaciones() {
   try {
@@ -8,11 +9,24 @@ async function loadNotificaciones() {
     if (!res.ok) throw new Error('Error fetching notificaciones');
     const data = await res.json();
     renderNotis(data.items || data);
-  } catch (err) { notiList.innerHTML = '<p>Error cargando notificaciones</p>'; console.error(err); }
+  } catch (err) {
+    if (notiEmpty) {
+      notiList.innerHTML = '';
+      notiEmpty.classList.remove('d-none');
+    } else {
+      notiList.innerHTML = '<p>Error cargando notificaciones</p>';
+    }
+    console.error(err);
+  }
 }
 
 function renderNotis(items) {
-  if (!items || items.length === 0) { notiList.innerHTML = '<p>No hay notificaciones.</p>'; return; }
+  if (!items || items.length === 0) {
+    notiList.innerHTML = '';
+    if (notiEmpty) notiEmpty.classList.remove('d-none');
+    return;
+  }
+  if (notiEmpty) notiEmpty.classList.add('d-none');
   notiList.innerHTML = '';
   items.forEach(n => {
     const div = document.createElement('div');

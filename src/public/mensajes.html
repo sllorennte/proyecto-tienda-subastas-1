@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/mensajes.css" />
   <link rel="stylesheet" href="css/index.css" />
+  <link rel="stylesheet" href="/css/productos.css" />
   <link rel="stylesheet" href="css/theme.css" />
 </head>
 <body>
@@ -21,11 +22,12 @@
         Biddable
       </a>
       <nav class="app-nav">
-        <a href="index.html">Inicio</a>
         <a href="productos.html" class="is-active">Subastas</a>
         <a href="misPujas.html">Mis pujas</a>
         <a href="misProductos.html">Mis productos</a>
-        <a href="favoritos.html">Favoritos</a>
+        <a href="notificaciones.html" title="Notificaciones"><i class="fas fa-bell"></i></a>
+        <a href="transacciones.html" title="Transacciones"><i class="fas fa-receipt"></i></a>
+        <a href="favoritos.html" title="Favoritos"><i class="fas fa-heart"></i></a>
         <a href="mensajes.html"><i class="fas fa-envelope"></i></a>
         <a href="miCuenta.html"><i class="fas fa-user"></i></a>
       </nav>
@@ -37,17 +39,19 @@
   </header>
 
   <!-- MENSAJES -->
-  <main class="container my-5">
-    <h2 class="mb-4 fw-semibold text-center">Mensajes recibidos</h2>
-
-    <div id="lista-mensajes" class="d-flex flex-column gap-3">
-      <!-- Mensajes se inyectarán aquí -->
-    </div>
-
-    <div id="no-mensajes" class="text-center text-muted py-5" style="display: none;">
-      No tienes mensajes por ahora.
-    </div>
-  </main>
+    <main class="container">
+        <section class="glass-panel" style="max-width:1100px;margin:2rem auto;">
+          <div class="section-heading">
+            <h2 class="section-heading__title">Mensajes recibidos</h2>
+          </div>
+          <div id="lista-mensajes" class="d-flex flex-column gap-3"></div>
+          <div id="no-mensajes" class="empty-state d-none" style="margin-top:1rem;">
+            <i class="fas fa-envelope" style="font-size:2.2rem;color:var(--brand-primary);"></i>
+            <h3>No tienes mensajes aún</h3>
+            <p>Contacta con soporte o espera mensajes de otros usuarios.</p>
+          </div>
+        </section>
+      </main>
 
   <!-- Modal para responder mensaje -->
   <div class="modal fade" id="modal-respuesta" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -67,6 +71,45 @@
       </div>
     </div>
   </div>
+  <footer class="app-footer">
+    <div class="app-footer__inner">
+      <div class="app-footer__brand">
+        <a href="index.html" class="app-brand">
+          <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+          Biddable
+        </a>
+        <p>Marketplace de subastas premium con servicio concierge, verificación documental y pagos garantizados.</p>
+      </div>
+      <div class="app-footer__cols">
+        <div class="app-footer__col">
+          <h4>Explorar</h4>
+          <ul>
+            <li><a href="productos.html">Subastas activas</a></li>
+            <li><a href="misPujas.html">Mis pujas</a></li>
+            <li><a href="misProductos.html">Mi inventario</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Soporte</h4>
+          <ul>
+            <li><a href="mensajes.html">Centro de mensajes</a></li>
+            <li><a href="miCuenta.html">Preferencias de cuenta</a></li>
+            <li><a href="registro.html">Unirme a Biddable</a></li>
+          </ul>
+        </div>
+        <div class="app-footer__col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Términos de uso</a></li>
+            <li><a href="#">Política de privacidad</a></li>
+            <li><a href="#">Centro de confianza</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2025 Biddable. Todos los derechos reservados.</div>
+  </footer>
+  
 
   <!-- Contenedor para notificaciones -->
   <div id="notificacion-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;"></div>

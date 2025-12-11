@@ -40,6 +40,22 @@ function updateBadge(count) {
   } catch (e) { console.warn('Error updating badge', e); }
 }
 
+function updateMessageDot(show) {
+  try {
+    var anchors = document.querySelectorAll('a[href="mensajes.html"]');
+    anchors.forEach(function(a) {
+      var d = a.querySelector('.msg-dot');
+      if (!d) {
+        d = document.createElement('span');
+        d.className = 'msg-dot';
+        d.style.cssText = 'display:inline-block;width:10px;height:10px;border-radius:50%;background:#dc3545;margin-left:6px;vertical-align:middle;';
+        a.appendChild(d);
+      }
+      d.style.display = show ? 'inline-block' : 'none';
+    });
+  } catch (e) { console.warn('Error updating message dot', e); }
+}
+
 function fetchUnreadCount() {
   if (typeof window === 'undefined' || !fetch) return;
   var headers = _token_noti ? { Authorization: 'Bearer ' + _token_noti } : {};
@@ -61,6 +77,7 @@ function initSocketAndJoin() {
     if (uid) socket.emit('joinUser', uid);
   } catch (e) { }
   socket.on('notificacion', function() { fetchUnreadCount(); });
+  socket.on('mensaje', function() { updateMessageDot(true); });
   return true;
 }
 
@@ -78,6 +95,9 @@ if (typeof window !== 'undefined') {
     fetchUnreadCount();
     try { if (typeof initSocketAndJoin === 'function') initSocketAndJoin(); } catch (e) {}
   });
+
+  // Inicialmente ocultar punto de mensajes (se mostrará al recibir 'mensaje')
+  try { updateMessageDot(false); } catch (e) {}
 }
 
 // Resaltar el enlace activo del header según la página actual

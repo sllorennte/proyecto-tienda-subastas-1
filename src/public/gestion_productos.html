@@ -11,7 +11,7 @@
 <body>
 <header class="bg-white border-bottom shadow-sm sticky-top header-grande">
   <div class="container d-flex justify-content-between align-items-center py-3">
-    <a href="index.html" class="d-flex align-items-center gap-3 text-decoration-none">
+    <a href="index_admin.html" class="d-flex align-items-center gap-3 text-decoration-none">
       <img src="uploads/logo-removebg-preview.png" alt="Logo" height="60">
       <span class="fw-bold text-dark fs-4">Biddable</span>
     </a>
@@ -25,6 +25,10 @@
 
 <main class="container py-5">
   <h1 class="mb-4">Gestión de Productos</h1>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div></div>
+    <button id="btn-nuevo-producto" class="btn btn-success">Nuevo Producto</button>
+  </div>
   <div id="tabla-productos" class="table-responsive">
     <table class="table table-bordered table-striped">
       <thead>
@@ -40,6 +44,55 @@
     </table>
   </div>
 </main>
+
+<!-- Modal Crear Producto -->
+<div class="modal fade" id="modalCrearProducto" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Crear nuevo producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-crear-producto">
+          <div class="mb-3">
+            <label class="form-label">Título</label>
+            <input id="cp-titulo" name="titulo" type="text" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea id="cp-descripcion" name="descripcion" class="form-control" rows="4"></textarea>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Precio inicial (€)</label>
+              <input id="cp-precio" name="precioInicial" type="number" min="0" step="0.01" class="form-control" required />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Fecha de expiración</label>
+              <input id="cp-fecha" name="fechaExpiracion" type="datetime-local" class="form-control" required />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Categoría</label>
+            <select id="cp-categoria" name="categoria" class="form-select">
+              <option value="">Selecciona una categoría</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Imágenes (subir desde tu equipo)</label>
+            <input id="cp-imagenes" name="imagenes" type="file" class="form-control" accept="image/*" multiple />
+            <div class="form-text">Puedes subir hasta 6 imágenes. Se almacenarán en el servidor.</div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button id="btn-crear-producto" type="button" class="btn btn-success">Crear producto</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- MODAL DE CONFIRMACIÓN -->
 <div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" aria-hidden="true">
@@ -65,7 +118,7 @@
   <footer class="app-footer">
     <div class="app-footer__inner">
       <div class="app-footer__brand">
-        <a href="index.html" class="app-brand">
+        <a href="index_admin.html" class="app-brand">
           <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
           Biddable
         </a>

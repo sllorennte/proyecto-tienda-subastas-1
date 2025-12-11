@@ -33,6 +33,11 @@ exports.responderMensaje = async (req, res) => {
       texto
     });
     await resp.save();
+    try {
+      const io = req.app && req.app.locals && req.app.locals.io;
+      const room = `user_${destinatarioId}`;
+      if (io) io.to(room).emit('mensaje', { mensajeId: resp._id, from: userId });
+    } catch (e) { console.warn('No se pudo emitir socket mensaje:', e && e.message ? e.message : e); }
     res.status(201).json(resp);
   } catch (err) {
     console.error('Error en responderMensaje:', err);
@@ -57,6 +62,11 @@ exports.crearMensaje = async (req, res) => {
     });
 
     await nuevoMensaje.save();
+    try {
+      const io = req.app && req.app.locals && req.app.locals.io;
+      const room = `user_${destinatario}`;
+      if (io) io.to(room).emit('mensaje', { mensajeId: nuevoMensaje._id, from: remitente });
+    } catch (e) { console.warn('No se pudo emitir socket mensaje:', e && e.message ? e.message : e); }
     res.status(201).json(nuevoMensaje);
   } catch (err) {
     console.error(err);
@@ -90,6 +100,11 @@ exports.enviarSoporte = async (req, res) => {
     console.log('enviarSoporte: remitente=', remitente, 'admin=', admin && admin._id);
     const nuevo = new Mensaje({ remitente, destinatario: admin._id, texto, fecha: new Date() });
     await nuevo.save();
+    try {
+      const io = req.app && req.app.locals && req.app.locals.io;
+      const room = `user_${admin._id}`;
+      if (io) io.to(room).emit('mensaje', { mensajeId: nuevo._id, from: remitente });
+    } catch (e) { console.warn('No se pudo emitir socket mensaje soporte:', e && e.message ? e.message : e); }
     res.status(201).json(nuevo);
   } catch (err) {
     console.error('Error enviarSoporte:', err);

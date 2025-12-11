@@ -12,24 +12,27 @@
   </head>
   <body>
     <header class="app-header">
-      <div class="app-header__inner">
-        <a href="index.html" class="app-brand">
-          <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
-          Biddable
-        </a>
-        <nav class="app-nav">
-          <a href="productos.html">Subastas</a>
-          <a href="subastas-finalizadas.html">Finalizadas</a>
-          <a href="favoritos.html">Favoritos</a>
-          <a href="mensajes.html"><i class="fas fa-envelope"></i></a>
-          <a href="miCuenta.html"><i class="fas fa-user"></i></a>
-        </nav>
-        <div class="app-header__actions">
-          <a href="crearProducto.html" class="btn btn-outline-light">Vender un artículo</a>
-          <a href="productos.html" class="btn btn-primary">Explorar subastas</a>
-        </div>
+    <div class="app-header__inner">
+      <a href="index.html" class="app-brand">
+        <img src="uploads/logo-removebg-preview.png" alt="Biddable" />
+        Biddable
+      </a>
+      <nav class="app-nav">
+        <a href="productos.html" class="is-active">Subastas</a>
+        <a href="misPujas.html">Mis pujas</a>
+        <a href="misProductos.html">Mis productos</a>
+        <a href="notificaciones.html" title="Notificaciones"><i class="fas fa-bell"></i></a>
+        <a href="transacciones.html" title="Transacciones"><i class="fas fa-receipt"></i></a>
+        <a href="favoritos.html" title="Favoritos"><i class="fas fa-heart"></i></a>
+        <a href="mensajes.html"><i class="fas fa-envelope"></i></a>
+        <a href="miCuenta.html"><i class="fas fa-user"></i></a>
+      </nav>
+      <div class="app-header__actions">
+        <a href="crearProducto.html" class="btn btn-outline-light">Vender un artículo</a>
+        <a href="productos.html" class="btn btn-primary">Explorar subastas</a>
       </div>
-    </header>
+    </div>
+  </header>
 
     <main class="container">
       <section class="glass-panel" style="max-width:960px;margin:2rem auto;">
@@ -40,6 +43,25 @@
         <div id="trans-pagination" style="margin-top:1rem;text-align:center"></div>
       </section>
     </main>
+  
+  <!-- Modal eliminar transacción -->
+  <div class="modal fade" id="deleteTransactionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirmar eliminación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <p id="delete-transaction-message">¿Eliminar esta transacción?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button id="confirm-delete-transaction" type="button" class="btn btn-danger">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <footer class="app-footer">
     <div class="app-footer__inner">
       <div class="app-footer__brand">

@@ -271,18 +271,11 @@
         if (!token) { window.location.href = 'login.html'; return; }
 
         try {
-          // Buscar usuario admin (primer usuario con rol 'admin')
-          var resUsers = await fetch(apiUrl('/api/usuarios'));
-          if (!resUsers.ok) throw new Error('No se pudo obtener usuarios');
-          var users = await resUsers.json();
-          var admin = (users || []).find(u => u.rol === 'admin');
-          if (!admin) { errorEl.textContent = 'No se encontró un administrador en el sistema.'; return; }
-
-          // Enviar mensaje
-          var resp = await fetch(apiUrl('/api/mensajes'), {
+          // Enviar mensaje directamente al soporte (endpoint servidor que elige admin)
+          var resp = await fetch(apiUrl('/api/mensajes/soporte'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-            body: JSON.stringify({ destinatario: admin._id, texto })
+            body: JSON.stringify({ texto })
           });
           if (!resp.ok) {
             var err = await resp.json().catch(()=>({}));

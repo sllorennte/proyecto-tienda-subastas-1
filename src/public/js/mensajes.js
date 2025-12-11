@@ -21,12 +21,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!res.ok) throw new Error('Error al cargar mensajes');
     const mensajes = await res.json();
 
+    // ocultar el punto de nuevo mensaje (si existe) cuando el usuario carga la página
+    try { document.querySelectorAll('a[href="mensajes.html"]').forEach(a => { const d = a.querySelector('.msg-dot'); if (d) d.style.display = 'none'; }); } catch (e) {}
+
     if (!Array.isArray(mensajes) || mensajes.length === 0) {
-      sinMensajes.style.display = 'block';
+      sinMensajes.classList.remove('d-none');
       return;
     }
 
-    sinMensajes.style.display = 'none';
+    sinMensajes.classList.add('d-none');
 
     mensajes.forEach(m => {
       const card = document.createElement('div');
@@ -83,7 +86,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               else console.warn('No se encontró tarjeta DOM para el mensaje eliminado, id=', id);
             }
             // si ya no quedan mensajes, mostrar sinMensajes
-            if (!listaMensajes.querySelector('.card')) sinMensajes.style.display = 'block';
+            if (!listaMensajes.querySelector('.card')) sinMensajes.classList.remove('d-none');
           } else {
             mostrarNotificacion('No se pudo eliminar el mensaje.', 'danger');
           }
@@ -126,6 +129,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (err) {
     console.error(err);
     sinMensajes.textContent = 'Error al cargar tus mensajes.';
-    sinMensajes.style.display = 'block';
+    sinMensajes.classList.remove('d-none');
   }
 });

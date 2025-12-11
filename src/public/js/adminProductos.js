@@ -8,6 +8,42 @@ document.addEventListener('DOMContentLoaded', async () => {
   let idProductoAEliminar = null;
   const modal = new bootstrap.Modal(document.getElementById('modalConfirmarEliminar'));
   const btnConfirmar = document.getElementById('btn-confirmar-eliminar');
+  // Modal y formulario crear producto
+  const crearModalEl = document.getElementById('modalCrearProducto');
+  const btnNuevoProducto = document.getElementById('btn-nuevo-producto');
+  const btnCrearProducto = document.getElementById('btn-crear-producto');
+  const formCrear = document.getElementById('form-crear-producto');
+  let bsCrearModal = null;
+  try { if (crearModalEl) bsCrearModal = new bootstrap.Modal(crearModalEl); } catch (e) { bsCrearModal = null; }
+  // Cargar categorías para el select
+  const selectCategoria = document.getElementById('cp-categoria');
+  async function cargarCategorias() {
+    try {
+      const r = await fetch(apiUrl('/api/categorias'));
+      if (!r.ok) return;
+      const cats = await r.json();
+      if (!Array.isArray(cats)) return;
+      // limpiar y añadir opciones
+      if (selectCategoria) {
+        selectCategoria.innerHTML = '<option value="">Selecciona una categoría</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+      }
+    } catch (e) { console.warn('No se pudieron cargar categorías', e); }
+  }
+  cargarCategorias();
+  
+  function agregarFilaProducto(p) {
+    const fila = document.createElement('tr');
+    fila.innerHTML = `
+      <td>${p.titulo}</td>
+      <td>${p.vendedor?.username || 'Admin'}</td>
+      <td>${p.precioInicial.toFixed(2)} €</td>
+      <td>${p.estado || 'activo'}</td>
+      <td>
+        <button class="btn btn-sm btn-outline-danger" data-id="${p._id}">Eliminar</button>
+      </td>
+    `;
+    tbody.appendChild(fila);
+  }
 
   try {
     const res = await fetch(apiUrl('/api/productos'), {
@@ -65,6 +101,73 @@ document.addEventListener('DOMContentLoaded', async () => {
       idProductoAEliminar = null;
       modal.hide();
     });
+  
+    // Nuevo producto: abrir modal
+    if (btnNuevoProducto && bsCrearModal) {
+      btnNuevoProducto.addEventListener('click', () => {
+        try { formCrear.reset(); bsCrearModal.show(); } catch (e) { }
+      });
+    }
+
+    // Crear producto: enviar al backend
+    if (btnCrearProducto && formCrear) {
+      btnCrearProducto.addEventListener('click', async () => {
+        const titulo = document.getElementById('cp-titulo').value.trim();
+        const descripcion = document.getElementById('cp-descripcion').value.trim();
+        const precioInicial = parseFloat(document.getElementById('cp-precio').value);
+        const fechaExpiracion = document.getElementById('cp-fecha').value;
+        const categoria = document.getElementById('cp-categoria').value || '';
+        const imagenesInput = document.getElementById('cp-imagenes');
+        const files = imagenesInput && imagenesInput.files ? Array.from(imagenesInput.files) : [];
+
+        if (!titulo || isNaN(precioInicial) || !fechaExpiracion) {
+          mostrarNotificacion('Rellena los campos obligatorios', 'warning');
+          return;
+        }
+
+        btnCrearProducto.disabled = true;
+        try {
+          // Si hay archivos, subir primero a /api/uploads
+          let nombresArchivos = [];
+          if (files.length) {
+            const fd = new FormData();
+            files.slice(0, 6).forEach(f => fd.append('files', f));
+            const up = await fetch(apiUrl('/api/uploads'), {
+              method: 'POST',
+              headers: { Authorization: `Bearer ${token}` },
+              body: fd
+            });
+            if (!up.ok) {
+              const err = await up.json().catch(()=>null);
+              throw new Error((err && err.error) ? err.error : 'Error subiendo imágenes');
+            }
+            const upData = await up.json();
+            nombresArchivos = upData.archivos || [];
+          }
+
+          const payload = { titulo, descripcion, precioInicial, fechaExpiracion, categoria };
+          if (nombresArchivos.length) payload.imagenes = nombresArchivos.join(',');
+          const r = await fetch(apiUrl('/api/productos'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+            body: JSON.stringify(payload)
+          });
+          if (!r.ok) {
+            const err = await r.json().catch(()=>null);
+            throw new Error((err && err.error) ? err.error : 'Error al crear producto');
+          }
+          const data = await r.json();
+          agregarFilaProducto(data.producto || data);
+          mostrarNotificacion('Producto creado correctamente', 'success');
+          try { bsCrearModal.hide(); } catch (e) {}
+        } catch (err) {
+          console.error(err);
+          mostrarNotificacion(err.message || 'No se pudo crear el producto', 'danger');
+        } finally {
+          btnCrearProducto.disabled = false;
+        }
+      });
+    }
   } catch (err) {
     console.error(err);
     mostrarNotificacion('Error al cargar productos', 'danger');

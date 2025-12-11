@@ -6,6 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   const listaContenedor = document.getElementById('lista-pujas');
   const sinPujasMsg = document.getElementById('sin-pujas');
+  // Confirm modal elements
+  const confirmModalEl = document.getElementById('confirmActionModal');
+  const confirmMessageEl = document.getElementById('confirm-action-message');
+  const confirmOkBtn = document.getElementById('confirm-action-ok');
+  let bsConfirmModal = null;
+  try { if (window.bootstrap && confirmModalEl) bsConfirmModal = new bootstrap.Modal(confirmModalEl); } catch (e) { bsConfirmModal = null; }
+  let pendingAction = null; // { type: 'delete'|'replace', card, nuevoValor }
 
   cargarPujas();
 
@@ -66,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
 
-    card.querySelector('.btn-eliminar').addEventListener('click', () => eliminarPuja(card));
+    card.querySelector('.btn-eliminar').addEventListener('click', () => confirmarEliminarPuja(card));
     card.querySelector('.btn-editar').addEventListener('click', () => iniciarEdicion(card));
 
     return card;
@@ -88,9 +95,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!listaContenedor.children.length) {
         sinPujasMsg.style.display = 'block';
       }
+      if (typeof mostrarNotificacion === 'function') mostrarNotificacion('Puja eliminada', 'success');
     } catch (err) {
       console.error('Error al eliminar la puja', err);
+      if (typeof mostrarNotificacion === 'function') mostrarNotificacion('No se pudo eliminar la puja', 'danger');
     }
+  }
+
+  function confirmarEliminarPuja(card) {
+    pendingAction = { type: 'delete', card };
+    const titulo = card.querySelector('h3') ? card.querySelector('h3').textContent.trim() : '';
+    confirmMessageEl.textContent = `¿Eliminar tu puja para “${titulo}”? Esta acción no se puede deshacer.`;
+    try { if (bsConfirmModal) bsConfirmModal.show(); } catch (e) { if (confirm('Eliminar puja?')) eliminarPuja(card); }
   }
 
   function iniciarEdicion(card) {
@@ -140,18 +156,12 @@ document.addEventListener('DOMContentLoaded', () => {
         input.classList.add('is-invalid');
         return;
       }
-      try {
-        await reemplazarPuja(card, nuevoValor);
-        montoTextoElem.textContent = nuevoValor.toFixed(2);
-        fechaElem.textContent = new Date().toLocaleString();
-
-        card.classList.remove('editando');
-        contenedorEdicion.remove();
-        acciones.style.display = 'flex';
-      } catch (err) {
-        console.error('Error al actualizar puja', err);
-        input.classList.add('is-invalid');
-      }
+      // En lugar de ejecutar directamente, pedimos confirmación
+      pendingAction = { type: 'replace', card, nuevoValor, montoTextoElem, fechaElem, contenedorEdicion, acciones };
+      confirmMessageEl.textContent = `Confirmar nueva puja de €${nuevoValor.toFixed(2)} para este lote?`;
+      try { if (bsConfirmModal) bsConfirmModal.show(); } catch (e) { if (confirm('Confirmar nueva puja?')) {
+        try { await reemplazarPuja(card, nuevoValor); montoTextoElem.textContent = nuevoValor.toFixed(2); fechaElem.textContent = new Date().toLocaleString(); card.classList.remove('editando'); contenedorEdicion.remove(); acciones.style.display = 'flex'; } catch (err) { console.error(err); input.classList.add('is-invalid'); }
+      } }
     });
   }
 
@@ -165,6 +175,36 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { Authorization: `Bearer ${token}` }
       });
     }
+
+      // Manejar confirmación del modal
+      if (confirmOkBtn) {
+        confirmOkBtn.addEventListener('click', async () => {
+          if (!pendingAction) return;
+          const action = pendingAction;
+          pendingAction = null;
+          try { if (bsConfirmModal) bsConfirmModal.hide(); } catch (e) {}
+          if (action.type === 'delete') {
+            await eliminarPuja(action.card);
+            return;
+          }
+          if (action.type === 'replace') {
+            const { card, nuevoValor, montoTextoElem, fechaElem, contenedorEdicion, acciones } = action;
+            try {
+              await reemplazarPuja(card, nuevoValor);
+              if (montoTextoElem) montoTextoElem.textContent = nuevoValor.toFixed(2);
+              if (fechaElem) fechaElem.textContent = new Date().toLocaleString();
+              if (card) card.classList.remove('editando');
+              if (contenedorEdicion) contenedorEdicion.remove();
+              if (acciones) acciones.style.display = 'flex';
+              if (typeof mostrarNotificacion === 'function') mostrarNotificacion('Puja actualizada', 'success');
+            } catch (err) {
+              console.error('Error al confirmar reemplazo de puja', err);
+              if (typeof mostrarNotificacion === 'function') mostrarNotificacion('No se pudo actualizar la puja', 'danger');
+            }
+            return;
+          }
+        });
+      }
 
     const resNew = await fetch(apiUrl('/api/pujas'), {
       method: 'POST',
