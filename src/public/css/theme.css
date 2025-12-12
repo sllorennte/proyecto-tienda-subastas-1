@@ -37,8 +37,6 @@ body {
 body::before {
   content: '';
   position: fixed;
-    /* Base color for the dark background (hero/overall).
-       Elements with white surfaces override to --brand-text explicitly. */
     color: var(--brand-text-on-dark);
   background-image:
     radial-gradient(circle at 15% 20%, rgba(20, 184, 166, 0.22), transparent 45%),
@@ -60,7 +58,6 @@ a:hover {
 img {
   max-width: 100%;
   display: block;
-    /* Force dark text inside white surfaces */
     color: var(--brand-text) !important;
 }
 
@@ -89,13 +86,46 @@ main {
   gap: 2.5rem;
 }
 
+/* Contenedor del menú (nav + acciones). En desktop se comporta como antes. */
+.app-header__menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.75rem;
+  flex: 1;
+}
+
+/* Botón hamburguesa (solo móvil) */
+.app-header__toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.92);
+  transition: var(--transition-base);
+}
+
+.app-header__toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+.app-header__toggle i {
+  font-size: 1.1rem;
+}
+
 .app-brand {
   display: flex;
   align-items: center;
-  gap: 0.6rem; /* reduced gap so brand is more left-aligned */
+  gap: 0.6rem; 
   color: #ffffff;
   font-weight: 700;
-  font-size: 1.35rem; /* slightly smaller to free horizontal space */
+  font-size: 1.35rem; 
   letter-spacing: 0.02em;
 }
 
@@ -105,8 +135,6 @@ main {
   object-fit: contain;
 }
 
-/* Make the logo appear white regardless of source color (works for raster images too).
-   For SVGs that respect currentColor this is unnecessary but harmless. */
 .app-brand img {
   width: 46px;
   height: 46px;
@@ -371,25 +399,46 @@ main {
     flex-wrap: wrap;
     row-gap: 1rem;
   }
-  .app-nav {
+  .app-header__menu {
     width: 100%;
-    justify-content: space-between;
-  }
-
-  .app-header__actions {
-    width: 100%;
-    justify-content: flex-end;
   }
 }
 
 @media (max-width: 768px) {
-  .app-nav {
-    flex-wrap: wrap;
-    row-gap: 0.75rem;
-  }
-
   .app-header__inner {
     padding: 0.9rem 1.25rem;
+  }
+
+  .app-header__toggle {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  /* Menú colapsable */
+  .app-header__menu {
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.9rem;
+    padding: 0.9rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .app-header.is-menu-open .app-header__menu {
+    display: flex;
+  }
+
+  .app-nav {
+    width: 100%;
+    flex-wrap: wrap;
+    row-gap: 0.75rem;
+    justify-content: flex-start;
+  }
+
+  /* Acciones fuera del menú hamburguesa: en móvil se ocultan */
+  .app-header__actions {
+    display: none;
   }
 
   .glass-panel {
