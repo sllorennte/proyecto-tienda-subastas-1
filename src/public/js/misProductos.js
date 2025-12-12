@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         col.id = `producto-${prod._id}`;
         const primeraImagen = (prod.imagenes && prod.imagenes.length)
           ? prod.imagenes[0]
-          : '/css/placeholder.png';
+          : '/uploads/placeholder.svg';
 
         const fechaExp = new Date(prod.fechaExpiracion);
         const ahora = new Date();
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         col.innerHTML = `
           <div class="card shadow-sm w-100">
-            <img src="${primeraImagen}" class="card-img-top" alt="${prod.titulo}" style="object-fit: cover; height: 180px;">
+            <img src="${primeraImagen}" class="card-img-top" alt="${prod.titulo}" style="object-fit: cover; height: 180px;" onerror="this.onerror=null;this.src='/uploads/placeholder.svg'">
             <div class="card-body d-flex flex-column">
               <h5 class="card-title fw-bold">${prod.titulo}</h5>
               <p class="text-muted small">${prod.descripcion ? prod.descripcion.substring(0, 60) + '…' : ''}</p>

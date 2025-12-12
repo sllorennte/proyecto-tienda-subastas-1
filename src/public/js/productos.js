@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Render as boxed product cards matching subastas-finalizadas UI
       items.forEach(p => {
-        const primeraImagen = p.imagenes?.[0] || 'uploads/placeholder.png';
+        const primeraImagen = p.imagenes?.[0] || '/uploads/placeholder.svg';
         const fechaExp = p.fechaExpiracion ? new Date(p.fechaExpiracion).toLocaleDateString('es-ES') : '—';
 
         const card = document.createElement('article');
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <button class="product-card__fav fav-toggle ${favoritosSet.has(String(p._id)) ? 'favorited' : ''}" data-id="${p._id}" title="Añadir a favoritos">
             <i class="${favoritosSet.has(String(p._id)) ? 'fas' : 'far'} fa-heart"></i>
           </button>
-          <div class="product-card__media"><img src="${primeraImagen}" alt="${p.titulo}"></div>
+          <div class="product-card__media"><img src="${primeraImagen}" alt="${p.titulo}" onerror="this.onerror=null;this.src='/uploads/placeholder.svg'"/></div>
           <div class="product-card__body">
             <h3>${p.titulo}</h3>
             <p>${p.descripcion || ''}</p>

@@ -28,6 +28,12 @@ exports.crearPuja = async (req, res) => {
     if (!producto) 
       return res.status(404).json({ error: 'Producto no encontrado' });
 
+    // No permitir que el vendedor puje en su propio producto
+    const vendedorId = producto.vendedor ? String(producto.vendedor) : null;
+    if (vendedorId && vendedorId === String(pujador)) {
+      return res.status(403).json({ error: 'No puedes pujar en tu propio producto.' });
+    }
+
     const ahora = new Date();
     const exp = new Date(producto.fechaExpiracion);
     if (producto.estado !== 'activo' || ahora > exp)

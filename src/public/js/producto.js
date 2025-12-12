@@ -131,7 +131,13 @@ async function loadProduct() {
     thumbnailsEl.innerHTML = '';
 
     if (!images || images.length === 0) {
-      imagenPrincipalEl.textContent = 'Sin imagen';
+      // Mostrar placeholder como imagen en lugar de texto
+      imagenPrincipalEl.innerHTML = '';
+      const noImg = document.createElement('img');
+      noImg.src = '/uploads/placeholder.svg';
+      noImg.alt = 'Sin imagen disponible';
+      noImg.classList.add('product-main-image');
+      imagenPrincipalEl.appendChild(noImg);
       return;
     }
 
@@ -140,6 +146,11 @@ async function loadProduct() {
     mainImg.alt = producto.titulo;
     mainImg.classList.add('product-main-image');
     imagenPrincipalEl.appendChild(mainImg);
+
+    // click sobre la imagen principal abre modal ampliado
+    mainImg.addEventListener('click', () => {
+      openImageModal(mainImg.src, mainImg.alt);
+    });
 
     images.forEach((url, idx) => {
       const thumb = document.createElement('img');
@@ -154,6 +165,28 @@ async function loadProduct() {
       });
       thumbnailsEl.appendChild(thumb);
     });
+  }
+
+  // Función utilitaria para mostrar imagen ampliada en modal (crea modal si no existe)
+  function openImageModal(src, alt) {
+    let modalEl = document.getElementById('imagePreviewModal');
+    if (!modalEl) {
+      modalEl = document.createElement('div');
+      modalEl.id = 'imagePreviewModal';
+      modalEl.className = 'modal fade';
+      modalEl.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content bg-transparent border-0">
+            <div class="modal-body d-flex justify-content-center align-items-center p-0">
+              <img src="" alt="" id="imagePreviewModalImg" style="max-width:100%;height:auto;display:block;"/>
+            </div>
+          </div>
+        </div>`;
+      document.body.appendChild(modalEl);
+    }
+    const img = modalEl.querySelector('#imagePreviewModalImg');
+    if (img) { img.src = src; img.alt = alt || ''; }
+    try { const bs = new bootstrap.Modal(modalEl); bs.show(); } catch (e) { window.open(src, '_blank'); }
   }
 
   // Actualiza el tiempo restante para la subasta
@@ -188,6 +221,17 @@ async function loadProduct() {
       showGallery(producto.imagenes);
       updateTime();
       setInterval(updateTime, 1000);
+
+      // Si el usuario autenticado es el vendedor, desactivar el formulario de puja
+      try {
+        const vendedorId = producto.vendedor ? String(producto.vendedor._id || producto.vendedor) : null;
+        if (vendedorId && String(userId) === vendedorId) {
+          if (formPuja) formPuja.querySelectorAll('button, input').forEach(el => el.disabled = true);
+          if (errorPujaEl) errorPujaEl.textContent = 'No puedes pujar en tu propio producto.';
+        }
+      } catch (e) {
+        console.warn('No se pudo evaluar vendedor del producto:', e && e.message ? e.message : e);
+      }
 
       // Unirse a la sala de Socket.IO del producto para recibir eventos en tiempo real
       try {

@@ -58,9 +58,19 @@ function updateMessageDot(show) {
 
 function fetchUnreadCount() {
   if (typeof window === 'undefined' || !fetch) return;
-  var headers = _token_noti ? { Authorization: 'Bearer ' + _token_noti } : {};
+  // Si no hay token no intentamos llamar al endpoint protegido
+  if (!_token_noti) {
+    try { updateBadge(0); } catch (e) {}
+    return;
+  }
+
+  var headers = { Authorization: 'Bearer ' + _token_noti };
   fetch('/api/notificaciones/unread-count', { headers: headers }).then(function(res) {
-    if (!res.ok) return;
+    if (!res.ok) {
+      // si no está autorizado, ocultamos badge
+      if (res.status === 401) try { updateBadge(0); } catch (e) {}
+      return null;
+    }
     return res.json();
   }).then(function(data) {
     if (!data) return;

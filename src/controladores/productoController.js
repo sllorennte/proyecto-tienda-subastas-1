@@ -27,22 +27,43 @@ exports.crearProducto = async (req, res) => {
     }
 
     let listaImagenes = [];
-    if (imagenes && typeof imagenes === 'string') {
-      listaImagenes = imagenes
-        .split(',')
-        .map(nombre => nombre.trim())
-        .filter(nombre => nombre);
+    if (imagenes) {
+      // soportar tanto string con nombres separados por coma como array de nombres
+      if (typeof imagenes === 'string') {
+        listaImagenes = imagenes
+          .split(',')
+          .map(nombre => nombre.trim())
+          .filter(nombre => nombre);
+      } else if (Array.isArray(imagenes)) {
+        listaImagenes = imagenes.map(nombre => String(nombre).trim()).filter(Boolean);
+      }
 
-      const invalidas = listaImagenes.filter(nombre => {
-        return !/\.(jpe?g|png|gif)$/i.test(nombre);
+      // normalizar nombres/paths: si vienen como 'uploads/..' o '/uploads/..' extraer sólo el filename
+      listaImagenes = listaImagenes.map(nombre => {
+        // si ya es una URL completa (http:// o /uploads/...), intentamos normalizar a ruta relativa dentro de /uploads/
+        if (nombre.startsWith('/uploads/') || nombre.startsWith('uploads/')) {
+          return nombre.replace(/^\/*uploads\/*/, '');
+        }
+        if (/^https?:\/\//i.test(nombre)) {
+          // no tocamos URLs externas, las devolvemos tal cual
+          return nombre;
+        }
+        return nombre;
       });
+
+      // validar extensiones sólo para nombres locales (no para URLs completas)
+      const invalidas = listaImagenes.filter(nombre => !/^https?:\/\//i.test(nombre) && !/\.(jpe?g|png|gif|svg|webp)$/i.test(nombre));
       if (invalidas.length) {
         return res.status(400).json({
           error: `Estos nombres no parecen imágenes válidas: ${invalidas.join(', ')}`
         });
       }
 
-      listaImagenes = listaImagenes.map(nombre => `/uploads/${nombre}`);
+      // convertir a rutas públicas cuando sean nombres locales
+      listaImagenes = listaImagenes.map(nombre => {
+        if (/^https?:\/\//i.test(nombre)) return nombre;
+        return `/uploads/${nombre.replace(/^\/*/, '')}`;
+      });
     }
 
     const producto = new Producto({
@@ -176,18 +197,22 @@ exports.actualizarProducto = async (req, res) => {
     const datos = (({ titulo, descripcion, precioInicial, imagenes, fechaExpiracion, estado }) =>
       ({ titulo, descripcion, precioInicial, imagenes, fechaExpiracion, estado }))(req.body);
 
-    if (datos.imagenes && typeof datos.imagenes === 'string') {
-      let lista = datos.imagenes
-        .split(',')
-        .map(nombre => nombre.trim())
-        .filter(nombre => nombre);
-      const invalidas = lista.filter(nombre => !/\.(jpe?g|png|gif)$/i.test(nombre));
-      if (invalidas.length) {
-        return res.status(400).json({
-          error: `Estos nombres no parecen imágenes válidas: ${invalidas.join(', ')}`
-        });
+    if (datos.imagenes) {
+      // aceptar tanto string como array
+      let lista = [];
+      if (typeof datos.imagenes === 'string') {
+        lista = datos.imagenes.split(',').map(n => n.trim()).filter(Boolean);
+      } else if (Array.isArray(datos.imagenes)) {
+        lista = datos.imagenes.map(n => String(n).trim()).filter(Boolean);
       }
-      datos.imagenes = lista.map(nombre => `/uploads/${nombre}`);
+      const invalidas = lista.filter(nombre => !/^https?:\/\//i.test(nombre) && !/\.(jpe?g|png|gif|svg|webp)$/i.test(nombre));
+      if (invalidas.length) {
+        return res.status(400).json({ error: `Estos nombres no parecen imágenes válidas: ${invalidas.join(', ')}` });
+      }
+      datos.imagenes = lista.map(nombre => {
+        if (/^https?:\/\//i.test(nombre)) return nombre;
+        return `/uploads/${nombre.replace(/^\/*/, '')}`;
+      });
     }
 
     if (datos.fechaExpiracion) {

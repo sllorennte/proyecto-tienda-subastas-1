@@ -30,7 +30,7 @@ try {
       socket.join(room);
       console.log(`Socket ${socket.id} joined ${room}`);
     });
-    // allow clients to join a user-specific room to receive personal notifications
+
     socket.on('joinUser', userId => {
       const room = `user_${userId}`;
       socket.join(room);
@@ -51,12 +51,11 @@ const allowedOrigin = process.env.FRONTEND_URL && process.env.FRONTEND_URL.trim(
 app.use(cors({ origin: allowedOrigin, credentials: true }));
 app.options('*', cors());
 
-// Conexión a MongoDB (intento opcional: si falta MONGODB_URI el servidor seguirá levantando y se verá un aviso)
-// Determinar URI (usar variable de entorno o fallback a una instancia local para desarrollo)
+// Conexión a MongoDB
 const defaultLocalUri = 'mongodb://127.0.0.1:27017/tienda';
 const mongoUri = process.env.MONGODB_URI && process.env.MONGODB_URI.trim() !== '' ? process.env.MONGODB_URI : defaultLocalUri;
 
-// Loguear la URI usada (ocultar credenciales si las hay)
+// Loguear la URI usada 
 const hideCredentials = uri => {
   try {
     if (uri.includes('@')) {
@@ -107,7 +106,6 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
-// Serve some important static pages explicitly (ensure availability)
 app.get('/favoritos.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'favoritos.html')));
 app.get('/notificaciones.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'notificaciones.html')));
 app.get('/transacciones.html', (req, res) => res.sendFile(path.join(__dirname, 'public', 'transacciones.html')));
@@ -117,7 +115,7 @@ app.get('/subastas-finalizadas.html', (req, res) => res.sendFile(path.join(__dir
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
 
-// Mejor manejo de errores en el servidor (p. ej. EADDRINUSE)
+// Mejor manejo de errores en el servidor 
 server.on('error', err => {
   if (err && err.code === 'EADDRINUSE') {
     console.error(`Error: puerto ${PORT} en uso. Asegúrate de que no haya otra instancia ejecutándose o cambia la variable PORT.`);
@@ -127,7 +125,7 @@ server.on('error', err => {
   process.exit(1);
 });
 
-// Cerrar servidor limpiamente en SIGINT/SIGTERM para evitar procesos huérfanos
+// Cerrar servidor limpiamente en SIGINT/SIGTERM 
 process.on('SIGINT', () => {
   console.log('Recibido SIGINT, cerrando servidor...');
   server.close(() => process.exit(0));
@@ -137,7 +135,15 @@ process.on('SIGTERM', () => {
   server.close(() => process.exit(0));
 });
 
-// Job simple que revisa y emite cierre de subastas cada 30s
+// Nodemon reinicia enviando SIGUSR2; cerrar limpio evita EADDRINUSE
+process.once('SIGUSR2', () => {
+  console.log('Recibido SIGUSR2 (nodemon), reiniciando servidor...');
+  server.close(() => {
+    process.kill(process.pid, 'SIGUSR2');
+  });
+});
+
+// revisa y emite cierre de subastas cada 30s
 const Producto = require('./modelos/Producto');
 const Puja = require('./modelos/Puja');
 const Transaccion = require('./modelos/Transaccion');
@@ -147,9 +153,8 @@ setInterval(async () => {
     const now = new Date();
     const expiradas = await Producto.find({ estado: 'activo', fechaExpiracion: { $lte: now } });
     for (const p of expiradas) {
-      // Intentar cerrar la subasta de forma atómica: actualizar producto, crear transacción y emitir evento
+      // Intentar cerrar la subasta : actualizar producto, crear transacción y emitir evento
       try {
-        // Use MongoDB transactions when están disponibles (replica set). Si no, fallback.
         let session;
         try {
           session = await mongoose.startSession();
@@ -161,7 +166,7 @@ setInterval(async () => {
           await session.withTransaction(async () => {
             // re-load producto dentro de la sesión para evitar condiciones de carrera
             const prod = await Producto.findOne({ _id: p._id, estado: 'activo' }).session(session);
-            if (!prod) return; // ya gestionado por otra ejecución
+            if (!prod) return; // ya gestionado 
 
             // buscar la puja más alta
             const highest = await Puja.find({ producto: prod._id }).sort({ cantidad: -1 }).limit(1).session(session).populate('pujador', 'username email');
@@ -189,7 +194,7 @@ setInterval(async () => {
           });
           if (session) session.endSession();
         } else {
-          // Fallback no transaccional: comprobar estado antes de modificar
+          // comprobar estado antes de modificar
           const prod = await Producto.findOne({ _id: p._id, estado: 'activo' });
           if (!prod) continue;
           const highest = await Puja.find({ producto: prod._id }).sort({ cantidad: -1 }).limit(1).populate('pujador', 'username email');

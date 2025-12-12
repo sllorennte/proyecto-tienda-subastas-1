@@ -47,6 +47,25 @@
         </div>
       </section>
     </main>
+    
+    <!-- Modal confirmación eliminar notificación -->
+    <div class="modal fade" id="modal-eliminar-notificacion" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Eliminar notificación</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <p id="delete-noti-body">¿Eliminar esta notificación? Esta acción no se puede deshacer.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" id="confirm-delete-notification" class="btn btn-danger">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
   <footer class="app-footer">
     <div class="app-footer__inner">
       <div class="app-footer__brand">

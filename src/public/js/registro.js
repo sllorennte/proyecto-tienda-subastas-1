@@ -1,13 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('form-registro');
 
+  if (!form) {
+    console.warn('form-registro no encontrado en la página.');
+    return;
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const username = document.getElementById('username').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
-    const rol = document.getElementById('rol').value;
+    const usernameEl = document.getElementById('username');
+    const emailEl = document.getElementById('email');
+    const passwordEl = document.getElementById('password');
+    const rolEl = document.getElementById('rol');
+
+    const username = usernameEl ? usernameEl.value.trim() : '';
+    const email = emailEl ? emailEl.value.trim() : '';
+    const password = passwordEl ? passwordEl.value : '';
+    // el select 'rol' puede no estar presente (comentado en la UI); por defecto usamos 'usuario'
+    const rol = rolEl ? rolEl.value : 'usuario';
 
     if (!username || !email || !password || !rol) {
       mostrarNotificacion('Por favor, completa todos los campos.', 'danger');

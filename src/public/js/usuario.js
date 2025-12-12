@@ -50,11 +50,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       sinSubastas.classList.add('d-none');
       items.forEach(p => {
-        const primeraImagen = p.imagenes?.[0] || 'uploads/placeholder.png';
+        const primeraImagen = p.imagenes?.[0] || '/uploads/placeholder.svg';
         const div = document.createElement('div');
         div.className = 'product-card';
         div.innerHTML = `
-          <div class="product-card__media"><img src="${primeraImagen}" alt="${p.titulo}"></div>
+          <div class="product-card__media"><img src="${primeraImagen}" alt="${p.titulo}" onerror="this.onerror=null;this.src='/uploads/placeholder.svg'"></div>
           <div class="product-card__body">
             <h3>${p.titulo}</h3>
             <p>${p.descripcion || ''}</p>

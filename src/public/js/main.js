@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.className = 'col-md-4';
       card.innerHTML = `
         <div class="card shadow-sm h-100">
-          <img src="${primeraImagen}" class="card-img-top" alt="${p.titulo}" />
+          <img src="${primeraImagen}" class="card-img-top" alt="${p.titulo}" onerror="this.onerror=null;this.src='/uploads/placeholder.svg'" />
           <div class="card-body d-flex flex-column">
             <h5 class="card-title fw-bold">${p.titulo}</h5>
             <p class="text-muted">${p.descripcion || ''}</p>

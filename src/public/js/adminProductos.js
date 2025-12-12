@@ -19,15 +19,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   const selectCategoria = document.getElementById('cp-categoria');
   async function cargarCategorias() {
     try {
-      const r = await fetch(apiUrl('/api/categorias'));
-      if (!r.ok) return;
-      const cats = await r.json();
-      if (!Array.isArray(cats)) return;
-      // limpiar y añadir opciones
+      // Lista fija de categorías típicas
+      const cats = [
+        'Arte y antigüedades',
+        'Relojes y joyería',
+        'Moda y accesorios',
+        'Tecnología y electrónica',
+        'Hogar y decoración',
+        'Deportes y ocio',
+        'Automóviles y motocicletas',
+        'Coleccionables',
+        'Libros y música',
+        'Instrumentos y audio'
+      ];
       if (selectCategoria) {
         selectCategoria.innerHTML = '<option value="">Selecciona una categoría</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
       }
-    } catch (e) { console.warn('No se pudieron cargar categorías', e); }
+    } catch (e) { console.warn('Error preparando categorías', e); }
   }
   cargarCategorias();
   
@@ -68,6 +76,28 @@ document.addEventListener('DOMContentLoaded', async () => {
       `;
       tbody.appendChild(fila);
     });
+
+    // Además, cargar subastas finalizadas y mostrarlas también en la tabla para que el admin pueda gestionarlas
+    try {
+      const rf = await fetch(apiUrl('/api/productos/finalizadas?page=1&limit=100'), { headers: { Authorization: `Bearer ${token}` } });
+      if (rf.ok) {
+        const df = await rf.json();
+        const finalizadas = Array.isArray(df.productos) ? df.productos : (df || []);
+        finalizadas.forEach(p => {
+          const fila = document.createElement('tr');
+          fila.innerHTML = `
+            <td>${p.titulo} <small class="text-muted">(finalizada)</small></td>
+            <td>${p.vendedor?.username || 'Desconocido'}</td>
+            <td>${(p.precioFinal || p.precioInicial || 0).toFixed ? (p.precioFinal || p.precioInicial).toFixed(2) + ' €' : '—'}</td>
+            <td>vendido</td>
+            <td>
+              <button class="btn btn-sm btn-outline-danger" data-id="${p._id}">Eliminar</button>
+            </td>
+          `;
+          tbody.appendChild(fila);
+        });
+      }
+    } catch (e) { console.warn('No se pudieron cargar finalizadas en gestión', e); }
 
     tbody.addEventListener('click', e => {
       if (e.target.tagName === 'BUTTON') {
@@ -146,7 +176,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           }
 
           const payload = { titulo, descripcion, precioInicial, fechaExpiracion, categoria };
-          if (nombresArchivos.length) payload.imagenes = nombresArchivos.join(',');
+          // enviar como array de nombres para que el backend los normalice a rutas (/uploads/...)
+          if (nombresArchivos.length) payload.imagenes = nombresArchivos;
           const r = await fetch(apiUrl('/api/productos'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },

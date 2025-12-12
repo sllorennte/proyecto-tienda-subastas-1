@@ -83,6 +83,42 @@ exports.actualizarUsuario = async (req, res) => {
   }
 };
 
+exports.actualizarUsuarioActual = async (req, res) => {
+  try {
+    const { username, email, password } = req.body || {};
+
+    const updates = {};
+    if (typeof username === 'string' && username.trim().length > 0) updates.username = username.trim();
+    if (typeof email === 'string' && email.trim().length > 0) updates.email = email.trim();
+    if (typeof password === 'string' && password.length > 0) {
+      const salt = await bcrypt.genSalt(10);
+      updates.password = await bcrypt.hash(password, salt);
+    }
+
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({ error: 'No hay cambios para actualizar.' });
+    }
+
+    const usuario = await Usuario.findByIdAndUpdate(
+      req.user.id,
+      { $set: updates },
+      { new: true, runValidators: true }
+    ).select('-password');
+
+    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+    res.json({ mensaje: 'Usuario actualizado', usuario });
+  } catch (err) {
+    console.error(err);
+
+    if (err && err.code === 11000) {
+      const campos = Object.keys(err.keyPattern || err.keyValue || {}).join(', ') || 'usuario/email';
+      return res.status(400).json({ error: `El ${campos} ya está en uso.` });
+    }
+
+    res.status(400).json({ error: 'Error al actualizar', detalles: err && err.message ? err.message : err });
+  }
+};
+
 exports.eliminarUsuario = async (req, res) => {
   try {
     const usuario = await Usuario.findByIdAndDelete(req.params.id);
@@ -134,5 +170,31 @@ exports.obtenerUsuarioActual = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error al obtener usuario actual' });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const { email, password } = req.body || {};
+
+    const emailNorm = (typeof email === 'string') ? email.trim().toLowerCase() : '';
+    const pass = (typeof password === 'string') ? password : '';
+
+    if (!emailNorm || !pass) {
+      return res.status(400).json({ error: 'Email y nueva contraseña son obligatorios.' });
+    }
+
+    const usuario = await Usuario.findOne({ email: emailNorm });
+    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+    const salt = await bcrypt.genSalt(10);
+    const hashed = await bcrypt.hash(pass, salt);
+    usuario.password = hashed;
+    await usuario.save();
+
+    res.json({ mensaje: 'Contraseña actualizada. Ya puedes iniciar sesión.' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al actualizar la contraseña' });
   }
 };

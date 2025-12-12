@@ -14,6 +14,36 @@ document.addEventListener('DOMContentLoaded', () => {
   try { if (window.bootstrap && confirmModalEl) bsConfirmModal = new bootstrap.Modal(confirmModalEl); } catch (e) { bsConfirmModal = null; }
   let pendingAction = null; // { type: 'delete'|'replace', card, nuevoValor }
 
+  // Confirm OK button: single handler for both delete and replace actions
+  if (confirmOkBtn) {
+    confirmOkBtn.addEventListener('click', async () => {
+      if (!pendingAction) return;
+      const action = pendingAction;
+      pendingAction = null;
+      try { if (bsConfirmModal) bsConfirmModal.hide(); } catch (e) {}
+      if (action.type === 'delete') {
+        await eliminarPuja(action.card);
+        return;
+      }
+      if (action.type === 'replace') {
+        const { card, nuevoValor, montoTextoElem, fechaElem, contenedorEdicion, acciones } = action;
+        try {
+          await reemplazarPuja(card, nuevoValor);
+          if (montoTextoElem) montoTextoElem.textContent = nuevoValor.toFixed(2);
+          if (fechaElem) fechaElem.textContent = new Date().toLocaleString();
+          if (card) card.classList.remove('editando');
+          if (contenedorEdicion) contenedorEdicion.remove();
+          if (acciones) acciones.style.display = 'flex';
+          if (typeof mostrarNotificacion === 'function') mostrarNotificacion('Puja actualizada', 'success');
+        } catch (err) {
+          console.error('Error al confirmar reemplazo de puja', err);
+          if (typeof mostrarNotificacion === 'function') mostrarNotificacion('No se pudo actualizar la puja', 'danger');
+        }
+        return;
+      }
+    });
+  }
+
   cargarPujas();
 
   async function cargarPujas() {
@@ -176,35 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-      // Manejar confirmación del modal
-      if (confirmOkBtn) {
-        confirmOkBtn.addEventListener('click', async () => {
-          if (!pendingAction) return;
-          const action = pendingAction;
-          pendingAction = null;
-          try { if (bsConfirmModal) bsConfirmModal.hide(); } catch (e) {}
-          if (action.type === 'delete') {
-            await eliminarPuja(action.card);
-            return;
-          }
-          if (action.type === 'replace') {
-            const { card, nuevoValor, montoTextoElem, fechaElem, contenedorEdicion, acciones } = action;
-            try {
-              await reemplazarPuja(card, nuevoValor);
-              if (montoTextoElem) montoTextoElem.textContent = nuevoValor.toFixed(2);
-              if (fechaElem) fechaElem.textContent = new Date().toLocaleString();
-              if (card) card.classList.remove('editando');
-              if (contenedorEdicion) contenedorEdicion.remove();
-              if (acciones) acciones.style.display = 'flex';
-              if (typeof mostrarNotificacion === 'function') mostrarNotificacion('Puja actualizada', 'success');
-            } catch (err) {
-              console.error('Error al confirmar reemplazo de puja', err);
-              if (typeof mostrarNotificacion === 'function') mostrarNotificacion('No se pudo actualizar la puja', 'danger');
-            }
-            return;
-          }
-        });
-      }
+      
 
     const resNew = await fetch(apiUrl('/api/pujas'), {
       method: 'POST',

@@ -12,6 +12,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const inputRespuesta = document.getElementById('input-respuesta');
   const btnEnviarRespuesta = document.getElementById('btn-enviar-respuesta');
   let mensajeIdSeleccionado = null;
+  // Delete confirmation modal
+  const deleteModalEl = document.getElementById('modal-eliminar-mensaje');
+  const deleteMessageBody = document.getElementById('delete-message-body');
+  const confirmDeleteBtn = document.getElementById('confirm-delete-message');
+  let bsDeleteModal = null;
+  let pendingDeleteId = null;
+  try { if (window.bootstrap && deleteModalEl) bsDeleteModal = new bootstrap.Modal(deleteModalEl); } catch (e) { bsDeleteModal = null; }
 
   try {
     const res = await fetch(apiUrl('/api/mensajes'), {
@@ -61,39 +68,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     });
 
-    // Delete handlers
+    // Delete handlers (use modal confirmation)
     document.querySelectorAll('.btn-eliminar').forEach(btn => {
-      btn.addEventListener('click', async (e) => {
+      btn.addEventListener('click', (e) => {
         const id = e.currentTarget.dataset.id;
-        if (!confirm('¿Eliminar este mensaje? Esta acción no se puede deshacer.')) return;
-        try {
-          const res = await fetch(apiUrl(`/api/mensajes/${id}`), {
-            method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
-          if (res.ok) {
-            mostrarNotificacion('Mensaje eliminado', 'success');
-            // quitar tarjeta del DOM (proteger si closest no existe)
-            const btnEl = e.currentTarget || e.target;
-            const cardEl = (btnEl && typeof btnEl.closest === 'function') ? btnEl.closest('.card') : null;
-            if (cardEl) {
-              cardEl.remove();
-            } else {
-              // fallback: buscar el botón por id y eliminar su tarjeta
-              const fallbackBtn = listaMensajes.querySelector(`.btn-eliminar[data-id="${id}"]`);
-              const fallbackCard = (fallbackBtn && typeof fallbackBtn.closest === 'function') ? fallbackBtn.closest('.card') : null;
-              if (fallbackCard) fallbackCard.remove();
-              else console.warn('No se encontró tarjeta DOM para el mensaje eliminado, id=', id);
-            }
-            // si ya no quedan mensajes, mostrar sinMensajes
-            if (!listaMensajes.querySelector('.card')) sinMensajes.classList.remove('d-none');
-          } else {
-            mostrarNotificacion('No se pudo eliminar el mensaje.', 'danger');
-          }
-        } catch (err) {
-          console.error('Error borrando mensaje:', err);
-          mostrarNotificacion('Error de red al eliminar mensaje.', 'danger');
-        }
+        pendingDeleteId = id;
+        const card = e.currentTarget.closest('.card');
+        const remitente = card ? (card.querySelector('strong') ? card.querySelector('strong').textContent : '') : '';
+        deleteMessageBody.textContent = remitente ? `¿Eliminar ${remitente} - mensaje? Esta acción no se puede deshacer.` : '¿Eliminar este mensaje? Esta acción no se puede deshacer.';
+        try { if (bsDeleteModal) bsDeleteModal.show(); else if (confirm('¿Eliminar este mensaje?')) doDeleteMessage(id); } catch (err) { console.warn(err); }
       });
     });
 
@@ -125,6 +108,43 @@ document.addEventListener('DOMContentLoaded', async () => {
         mostrarNotificacion('Error de red al enviar la respuesta.', 'danger');
       }
     });
+
+    // perform deletion when modal confirmed
+    if (confirmDeleteBtn) {
+      confirmDeleteBtn.addEventListener('click', async () => {
+        if (!pendingDeleteId) return;
+        confirmDeleteBtn.disabled = true;
+        try {
+          await doDeleteMessage(pendingDeleteId);
+        } finally {
+          confirmDeleteBtn.disabled = false;
+          pendingDeleteId = null;
+          try { if (bsDeleteModal) bsDeleteModal.hide(); } catch (e) {}
+        }
+      });
+    }
+
+    async function doDeleteMessage(id) {
+      try {
+        const res = await fetch(apiUrl(`/api/mensajes/${id}`), {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+          mostrarNotificacion('Mensaje eliminado', 'success');
+          // remove card
+          const btnEl = listaMensajes.querySelector(`.btn-eliminar[data-id="${id}"]`);
+          const cardEl = (btnEl && typeof btnEl.closest === 'function') ? btnEl.closest('.card') : null;
+          if (cardEl) cardEl.remove();
+          if (!listaMensajes.querySelector('.card')) sinMensajes.classList.remove('d-none');
+        } else {
+          mostrarNotificacion('No se pudo eliminar el mensaje.', 'danger');
+        }
+      } catch (err) {
+        console.error('Error borrando mensaje:', err);
+        mostrarNotificacion('Error de red al eliminar mensaje.', 'danger');
+      }
+    }
 
   } catch (err) {
     console.error(err);

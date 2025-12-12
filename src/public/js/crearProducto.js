@@ -25,9 +25,35 @@ document.addEventListener('DOMContentLoaded', () => {
       img.style.width = '90px'; img.style.height = '90px'; img.style.objectFit = 'cover';
       reader.onload = e => { img.src = e.target.result; };
       reader.readAsDataURL(file);
+      // click en la previsualización abre modal ampliado
+      img.addEventListener('click', () => {
+        openImageModal(img.src, img.alt);
+      });
       previewCont.appendChild(img);
     });
   });
+
+  // Imagen modal reutilizable (crea y muestra)
+  function openImageModal(src, alt) {
+    let modalEl = document.getElementById('imagePreviewModal');
+    if (!modalEl) {
+      modalEl = document.createElement('div');
+      modalEl.id = 'imagePreviewModal';
+      modalEl.className = 'modal fade';
+      modalEl.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content bg-transparent border-0">
+            <div class="modal-body d-flex justify-content-center align-items-center p-0">
+              <img src="" alt="" id="imagePreviewModalImg" style="max-width:100%;height:auto;display:block;"/>
+            </div>
+          </div>
+        </div>`;
+      document.body.appendChild(modalEl);
+    }
+    const img = modalEl.querySelector('#imagePreviewModalImg');
+    if (img) { img.src = src; img.alt = alt || ''; }
+    try { const bs = new bootstrap.Modal(modalEl); bs.show(); } catch (e) { window.open(src, '_blank'); }
+  }
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
